@@ -1,0 +1,52 @@
+#pragma once
+
+#include <SFML/Graphics.hpp>
+#include <memory>
+#include <string>
+#include <vector>
+#include <map>
+#include "maths.h"
+
+#define ls LevelSystem
+
+class LevelSystem {
+public:
+	enum TILE { EMPTY, START, END, WALL, ENEMY, WAYPOINT};
+
+	static void loadLevelFile(const std::string&, float tileSize = 100.f);
+	static void Render(sf::RenderWindow& window);
+	static sf::Color getColor(TILE t);
+	static void setColor(TILE t, sf::Color c);
+
+
+	// Get Tile at grid coordinate
+	static TILE getTile(sf::Vector2ul);
+
+	// Get screenspace coordinate of tile
+	static sf::Vector2f getTilePosition(sf::Vector2ul);
+
+	// Get the tile at screenspace pos
+	static TILE getTileAt(sf::Vector2f);
+
+	// Accessors for height and width
+	static size_t getWidth();
+	static size_t getHeight();
+
+protected:
+	static std::unique_ptr<TILE[]> _tiles;
+	static size_t _width;
+	static size_t _height;
+	static sf::Vector2f _offset;
+	static float _tileSize;
+	static std::map<TILE, sf::Color> _colours;
+
+	// Array of sfml sprites of each tile
+	static std::vector<std::unique_ptr<sf::RectangleShape>> _sprites;
+
+	// Generate the _sprites array
+	static void buildSprites();
+
+private:
+	LevelSystem() = delete;
+	~LevelSystem() = delete;
+};
