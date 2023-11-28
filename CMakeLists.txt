@@ -11,10 +11,10 @@ SET(OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/")
 # Ouput all DLLs from all libs into main build folder
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY})
 
-add_custom_target(copy_resources ALL COMMAND ${CMAKE_COMMAND} 
+add_custom_target(copy_resources ALL COMMAND ${CMAKE_COMMAND}
   -E copy_directory
     "${PROJECT_SOURCE_DIR}/res"
-    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIGURATION>/res
+    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/res
 )
 
 #### Add External Dependencies ####
@@ -64,6 +64,10 @@ target_link_libraries(lib_ecm PRIVATE lib_maths)
 file(GLOB_RECURSE SOURCES Drop-Pod/*.cpp Drop-Pod/*.h)
 file(GLOB_RECURSE CMPNTS Drop-Pod/components/*.cpp Drop-Pod/components/*.h)
 file(GLOB_RECURSE SCENES Drop-Pod/scenes/*.cpp Drop-Pod/scenes/*.h)
+#file(GLOB_RECURSE CMPNTS lab_7_platformer/components/*.cpp lab_7_platformer/components/*.h)
+#file(GLOB_RECURSE SCENES lab_7_platformer/scenes/*.cpp lab_7_platformer/scenes/*.h)
+#list(REMOVE_ITEM SOURCES lab_7_platformer/*.cpp lab_7_platformer/*.h)
+
 add_executable(Drop_Pod ${SOURCES} ${RESOURCE_FILES})
 source_group("components" FILES ${CMPNTS})
 source_group("resources" FILES ${RESOURCE_FILES})
@@ -73,7 +77,7 @@ set(EXECUTABLES ${EXECUTABLES} Drop_Pod)
 
 add_dependencies(Drop_Pod copy_resources)
 
-set_target_properties(Drop_Pod 
+set_target_properties(Drop_Pod
     PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration)
 )

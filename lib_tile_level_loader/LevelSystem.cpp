@@ -175,6 +175,7 @@ void LevelSystem::buildSprites(bool optimise) {
 		s->setPosition(t.p);
 		s->setSize(t.s);
 
+
 		if (getTileAt(t.p) == 'f')
 		{
 			s->setTexture(&floorTexture);
@@ -182,7 +183,7 @@ void LevelSystem::buildSprites(bool optimise) {
 		}
 		else
 		{
-			wallTexture.loadFromFile("res/assets/tiles/tileset.png");
+			wallTexture.loadFromFile("res/img/tileset.png");
 			s->setTexture(&wallTexture);
 			s->setTextureRect(wallTextureRect);
 		}

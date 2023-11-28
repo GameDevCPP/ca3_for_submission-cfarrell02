@@ -51,7 +51,7 @@ void MenuScene::Load() {
 	auto musicstatus = music.getStatus();
 	if (musicstatus == SoundSource::Stopped || musicstatus == SoundSource::Paused)
 	{
-		if (!music.openFromFile("res/assets/background_music/Cold-Moon.ogg"))
+		if (!music.openFromFile("res/sound/Cold-Moon.ogg"))
 			printf("music broken"); // error
 		music.setVolume(volume);
 		music.setLoop(true);
@@ -65,7 +65,7 @@ void MenuScene::Update(const double& dt) {
 	if (btnStart->GetCompatibleComponent<Button>()[0]->isPressed())
 	{
 		Engine::ChangeScene(&planetLevel);
-		ls::setTextureMap("res/assets/tiles/grass.png");
+		ls::setTextureMap("res/img/grass.png");
 		music.stop();
 	}
 	else if (btnSetting->GetCompatibleComponent<Button>()[0]->isPressed())
