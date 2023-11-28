@@ -6,6 +6,7 @@
 #include <iostream> // std::cout, std::fixed
 #include <sstream>
 #include <vector>
+#include <cstdint>
 
 namespace sf {
 	typedef Vector2<size_t> Vector2ul;
