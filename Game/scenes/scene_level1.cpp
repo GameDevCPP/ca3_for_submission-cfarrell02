@@ -13,11 +13,9 @@ using namespace sf;
 static shared_ptr<Entity> player;
 
 void Level1Scene::Load() {
-  cout << " Scene 1 Load" << endl;
-  ls::loadLevelFile("res/level_1.txt", 40.0f);
-
-  auto ho = Engine::getWindowSize().y - (ls::getHeight() * 40.f);
-  ls::setOffset(Vector2f(0, ho));
+    cout << " Scene 1 Load" << endl;
+    ls::loadTextureFile("res/img/Free/Terrain/Terrain (16x16).png", 16);
+    ls::loadLevelFile("res/level_1.txt", 40.0f);
 
   // Create player
     {
@@ -33,7 +31,7 @@ void Level1Scene::Load() {
 //        psprite->getSprite().setScale(1.5f, 1.5f);
         auto animComp = player->addComponent<AnimationComponent>();
         animComp->setAnimation(11, .05, idleTexture, *playerRect);
-        player->addComponent<PlayerPhysicsComponent>(Vector2f(16.f, 32));
+        player->addComponent<PlayerPhysicsComponent>(Vector2f(16.f, 30));
     }
 
   // Add physics colliders to level tiles.
@@ -48,8 +46,6 @@ void Level1Scene::Load() {
     }
   }
 
-  //Simulate long loading times
-  std::this_thread::sleep_for(std::chrono::milliseconds(3000));
   cout << " Scene 1 Load Done" << endl;
 
   setLoaded(true);

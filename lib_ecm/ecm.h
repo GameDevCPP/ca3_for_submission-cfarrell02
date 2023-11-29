@@ -108,6 +108,15 @@ public:
 		return std::move(ret);
 	}
 
+    // Remove components of type T
+    template <typename T>
+    void remove_components() {
+        static_assert(std::is_base_of<Component, T>::value, "T != component");
+        _components.erase(std::remove_if(_components.begin(), _components.end(), [](std::shared_ptr<Component> c) {
+            return typeid(*c) == typeid(T);
+        }), _components.end());
+    }
+
 	// Will return a T component, or anything derived from a T component.
 	template <typename T>
 	const std::vector<std::shared_ptr<T>> GetCompatibleComponent() {

@@ -22,20 +22,38 @@ void LevelSystem::setColor(LevelSystem::Tile t, sf::Color c) {
 std::unique_ptr<LevelSystem::Tile[]> LevelSystem::_tiles;
 size_t LevelSystem::_width;
 size_t LevelSystem::_height;
+// Initialize the static member _texture
+sf::Texture LevelSystem::_texture;
+std::vector<sf::IntRect> LevelSystem::textures;
 
 float LevelSystem::_tileSize(100.f);
 Vector2f LevelSystem::_offset(0.0f, 0.0f);
 // Vector2f LevelSystem::_offset(0,0);
 vector<std::unique_ptr<sf::RectangleShape>> LevelSystem::_sprites;
 
-Texture LevelSystem::floorTexture;
-IntRect LevelSystem::floorTextureRect = { Vector2i(0, 0), Vector2i(32, 32) };
-
-Texture LevelSystem::wallTexture;
-IntRect LevelSystem::wallTextureRect = { Vector2i(0, 0), Vector2i(32, 32) };
+void LevelSystem::loadTextureFile(const std::string &, float tileSize) {
+    _tileSize = tileSize;
+    size_t w = 0, h = 0;
+    // Open tilemap image
+    if (!_texture.loadFromFile("res/img/Free/Terrain/Terrain (16x16).png")) {
+        throw string("Couldn't load tilemap");
+    }
+    // Get tilemap size
+    w = _texture.getSize().x / tileSize;
+    h = _texture.getSize().y / tileSize;
+    // Create tiles
+    for(int i = 0; i < w; i++)
+    {
+        for(int j = 0; j < h; j++)
+        {
+            IntRect tileBounds = IntRect(j * tileSize, i * tileSize, tileSize, tileSize);
+            textures.push_back(tileBounds);
+        }
+    }
+}
 
 void LevelSystem::setTextureMap(string path) {
-	floorTexture.loadFromFile(path);
+	//floorTexture.loadFromFile(path);
 }
 
 void LevelSystem::loadLevelFile(const std::string& path, float tileSize) {
@@ -109,92 +127,18 @@ void LevelSystem::buildSprites(bool optimise) {
 	}
 
 	const auto nonempty = tps.size();
+    for (auto& t : tps) {
+        auto s = make_unique<sf::RectangleShape>();
+        s->setPosition(t.p);
+        s->setSize(t.s);
 
-	// If tile of the same type are next to each other,
-	// We can use one large sprite instead of two.
-	//if (optimise && nonempty) {
-	//
-	//  vector<tp> tpo;
-	//  tp last = tps[0];
-	//  size_t samecount = 0;
-	//
-	//  for (size_t i = 1; i < nonempty; ++i) {
-	//    // Is this tile compressible with the last?
-	//    bool same = ((tps[i].p.y == last.p.y) &&
-	//                 (tps[i].p.x == last.p.x + (tls.x * (1 + samecount))) &&
-	//                 (tps[i].c == last.c));
-	//    if (same) {
-	//      ++samecount; // Yes, keep going
-	//      // tps[i].c = Color::Green;
-	//    } else {
-	//      if (samecount) {
-	//        last.s.x = (1 + samecount) * tls.x; // Expand tile
-	//      }
-	//      // write tile to list
-	//      tpo.push_back(last);
-	//      samecount = 0;
-	//      last = tps[i];
-	//    }
-	//  }
-	//  // catch the last tile
-	//  if (samecount) {
-	//    last.s.x = (1 + samecount) * tls.x;
-	//    tpo.push_back(last);
-	//  }
-	//
-	//  // No scan down Y, using different algo now that compressible blocks may
-	//  // not be contiguous
-	//  const auto xsave = tpo.size();
-	//  samecount = 0;
-	//  vector<tp> tpox;
-	//  for (size_t i = 0; i < tpo.size(); ++i) {
-	//    last = tpo[i];
-	//    for (size_t j = i + 1; j < tpo.size(); ++j) {
-	//      bool same = ((tpo[j].p.x == last.p.x) && (tpo[j].s == last.s) &&
-	//                   (tpo[j].p.y == last.p.y + (tls.y * (1 + samecount))) &&
-	//                   (tpo[j].c == last.c));
-	//      if (same) {
-	//        ++samecount;
-	//        tpo.erase(tpo.begin() + j);
-	//        --j;
-	//      }
-	//    }
-	//    if (samecount) {
-	//      last.s.y = (1 + samecount) * tls.y; // Expand tile
-	//    }
-	//    // write tile to list
-	//    tpox.push_back(last);
-	//    samecount = 0;
-	//  }
-	//
-	//  tps.swap(tpox);
-	//}
+        // Assuming "_texture" is a member variable of type sf::Texture
+        s->setTexture(&_texture); // Assign the loaded texture to the sprite
+        // Set appropriate texture rectangle for the sprite based on your logic
+        s->setTextureRect(textures[8]);
 
-	for (auto& t : tps) {
-		auto s = make_unique<sf::RectangleShape>();
-		s->setPosition(t.p);
-		s->setSize(t.s);
-
-
-		if (getTileAt(t.p) == 'f')
-		{
-			s->setTexture(&floorTexture);
-			s->setTextureRect(floorTextureRect);
-		}
-		else
-		{
-			wallTexture.loadFromFile("res/img/tileset.png");
-			s->setTexture(&wallTexture);
-			s->setTextureRect(wallTextureRect);
-		}
-
-		_sprites.push_back(move(s));
-
-		//s->setFillColor(Color::Red);
-		//s->setFillColor(t.c);
-		// s->setFillColor(Color(rand()%255,rand()%255,rand()%255));
-	}
-
+        _sprites.push_back(std::move(s));
+    }
 	cout << "Level with " << (_width * _height) << " Tiles, With " << nonempty
 		<< " Not Empty, using: " << _sprites.size() << " Sprites\n";
 }

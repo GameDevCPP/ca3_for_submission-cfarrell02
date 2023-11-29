@@ -30,6 +30,13 @@ bool PlayerPhysicsComponent::isGrounded() const {
   return false;
 }
 
+void PlayerPhysicsComponent::SetAnimation(string textureUrl, int frames, float frameTime, Entity* player){
+    cout<<"Setting Animation: "<<textureUrl<<endl;
+    auto idleSprite = Resources::get<sf::Texture>(textureUrl);
+    player->GetCompatibleComponent<SpriteComponent>()[0]->getSprite().setTexture(*idleSprite);
+    player->GetCompatibleComponent<AnimationComponent>()[0]->setAnimation(frames, frameTime, idleSprite, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
+}
+
 void PlayerPhysicsComponent::update(double dt) {
 
   const auto pos = _parent->getPosition();
@@ -81,16 +88,25 @@ void PlayerPhysicsComponent::update(double dt) {
   setVelocity(v);
 
   // Handle Animation Behaviour
-    if((Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::D)) && _grounded) {
+    if(!_grounded){
+        // Jumping Texture
+        if(_animationState != PlayerAnimationState::JUMPING){
+            SetAnimation("Free/Main Characters/Mask Dude/Jump (32x32) 2.png", 8, .2, _parent);
+            _animationState = PlayerAnimationState::JUMPING;
+        }
+    }
+    else if(Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::D)) {
         // Running Texture
-        auto runningSprite = Resources::get<sf::Texture>("Free/Main Characters/Mask Dude/Run (32x32).png");
-        _parent->GetCompatibleComponent<SpriteComponent>()[0]->getSprite().setTexture(*runningSprite);
-        _parent->GetCompatibleComponent<AnimationComponent>()[0]->setAnimation(12, 0.05, runningSprite, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
+        if(_animationState != PlayerAnimationState::WALKING){
+            SetAnimation("Free/Main Characters/Mask Dude/Run (32x32).png", 8, 0.05, _parent);
+            _animationState = PlayerAnimationState::WALKING;
+        }
     }else {
         // Back to Idle Texture
-        auto idleSprite = Resources::get<sf::Texture>("Free/Main Characters/Mask Dude/Idle (32x32).png");
-        _parent->GetCompatibleComponent<SpriteComponent>()[0]->getSprite().setTexture(*idleSprite);
-        _parent->GetCompatibleComponent<AnimationComponent>()[0]->setAnimation(11, 0.05, idleSprite, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
+        if (_animationState != PlayerAnimationState::IDLE) {
+            SetAnimation("Free/Main Characters/Mask Dude/Idle (32x32).png", 11, 0.05, _parent);
+            _animationState = PlayerAnimationState::IDLE;
+        }
     }
 
     if (getVelocity().x > 0) {
