@@ -15,7 +15,7 @@ static shared_ptr<Entity> player;
 void Level1Scene::Load() {
     cout << " Scene 1 Load" << endl;
     ls::loadTextureFile("res/img/Free/Terrain/Terrain (16x16).png", 16);
-    ls::loadLevelFile("res/level_1.txt", 40.0f);
+    ls::loadLevelFile("res/level1.json", 40.0f);
 
   // Create player
     {
@@ -37,6 +37,8 @@ void Level1Scene::Load() {
   // Add physics colliders to level tiles.
   {
     auto walls = ls::findTiles(ls::WALL);
+    auto floors = ls::findTiles(ls::FLOOR);
+    walls.insert(walls.end(), floors.begin(), floors.end());
     for (auto w : walls) {
       auto pos = ls::getTilePosition(w);
       pos += Vector2f(20.f, 20.f); //offset to center

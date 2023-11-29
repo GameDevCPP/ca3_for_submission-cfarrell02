@@ -1,5 +1,6 @@
 #include "LevelSystem.h"
 #include <fstream>
+#include "JsonReader.h"
 
 using namespace std;
 using namespace sf;
@@ -25,6 +26,7 @@ size_t LevelSystem::_height;
 // Initialize the static member _texture
 sf::Texture LevelSystem::_texture;
 std::vector<sf::IntRect> LevelSystem::textures;
+LevelSystem::Level LevelSystem::_level;
 
 float LevelSystem::_tileSize(100.f);
 Vector2f LevelSystem::_offset(0.0f, 0.0f);
@@ -42,11 +44,12 @@ void LevelSystem::loadTextureFile(const std::string &, float tileSize) {
     w = _texture.getSize().x / tileSize;
     h = _texture.getSize().y / tileSize;
     // Create tiles
-    for(int i = 0; i < w; i++)
+    for(int i = 0; i < h; i++)
     {
-        for(int j = 0; j < h; j++)
+        for(int j = 0; j < w; j++)
         {
             IntRect tileBounds = IntRect(j * tileSize, i * tileSize, tileSize, tileSize);
+            cout<<"Adding tile: "<<tileBounds.left<<", "<<tileBounds.top<<endl;
             textures.push_back(tileBounds);
         }
     }
@@ -59,21 +62,8 @@ void LevelSystem::setTextureMap(string path) {
 void LevelSystem::loadLevelFile(const std::string& path, float tileSize) {
 	_tileSize = tileSize;
 	size_t w = 0, h = 0;
-	string buffer;
-
-	// Load in file to buffer
-	ifstream f(path);
-	if (f.good()) {
-		f.seekg(0, std::ios::end);
-		buffer.resize(f.tellg());
-		f.seekg(0);
-		f.read(&buffer[0], buffer.size());
-		f.close();
-	}
-	else {
-		throw string("Couldn't open level file: ") + path;
-	}
-
+    _level =  JsonReader::loadLevel(path);
+	string buffer = _level.map;
 	std::vector<Tile> temp_tiles;
 	int widthCheck = 0;
 	for (int i = 0; i < buffer.size(); ++i) {
@@ -134,8 +124,13 @@ void LevelSystem::buildSprites(bool optimise) {
 
         // Assuming "_texture" is a member variable of type sf::Texture
         s->setTexture(&_texture); // Assign the loaded texture to the sprite
-        // Set appropriate texture rectangle for the sprite based on your logic
-        s->setTextureRect(textures[8]);
+        int index = _level.tileMap[getTileAt(t.p)];
+        cout<< index << endl;
+        if (index == -1){
+            continue;
+        }
+
+        s->setTextureRect(textures[index]);
 
         _sprites.push_back(std::move(s));
     }

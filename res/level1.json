@@ -1,0 +1,19 @@
+{
+ "name": "test",
+ "tileMap": {
+  "f": 101, "s": -1, "w": 125, "c": 101
+ },
+ "map": [
+  "cccccccccccccccccccc",
+  "w                  w",
+  "w                  w",
+  "w                  w",
+  "w                  w",
+  "w                  w",
+  "w                  w",
+  "w                  w",
+  "w                  w",
+  "w       s          w",
+  "wffffffffffffffffffw"
+ ]
+}

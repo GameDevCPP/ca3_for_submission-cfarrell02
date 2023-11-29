@@ -31,6 +31,7 @@ bool PlayerPhysicsComponent::isGrounded() const {
 }
 
 void PlayerPhysicsComponent::SetAnimation(string textureUrl, int frames, float frameTime, Entity* player){
+    //TODO Update to not load texture every time
     cout<<"Setting Animation: "<<textureUrl<<endl;
     auto idleSprite = Resources::get<sf::Texture>(textureUrl);
     player->GetCompatibleComponent<SpriteComponent>()[0]->getSprite().setTexture(*idleSprite);
