@@ -24,6 +24,7 @@ public:
 
 	enum TILES {
 		EMPTY = ' ',
+        BACKGROUND = 'b',
 		START = 's',
 		END = 'e',
 		WALL = 'w',
@@ -61,8 +62,9 @@ public:
 
     struct Level {
         std::string name;
-        std::map<Tile, int> tileMap;
-        std::string map;
+        std::map<std::string, int> tileMap;
+        std::vector<std::vector<std::string>> map;
+        std::string rawMap;
     };
 
 

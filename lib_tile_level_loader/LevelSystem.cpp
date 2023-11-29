@@ -63,7 +63,7 @@ void LevelSystem::loadLevelFile(const std::string& path, float tileSize) {
 	_tileSize = tileSize;
 	size_t w = 0, h = 0;
     _level =  JsonReader::loadLevel(path);
-	string buffer = _level.map;
+	string buffer = _level.rawMap;
 	std::vector<Tile> temp_tiles;
 	int widthCheck = 0;
 	for (int i = 0; i < buffer.size(); ++i) {
@@ -124,8 +124,12 @@ void LevelSystem::buildSprites(bool optimise) {
 
         // Assuming "_texture" is a member variable of type sf::Texture
         s->setTexture(&_texture); // Assign the loaded texture to the sprite
-        int index = _level.tileMap[getTileAt(t.p)];
-        cout<< index << endl;
+
+        int xVal = (int) t.p.x/t.s.x;
+        int yVal = (int) t.p.y/t.s.y;
+        auto charVal = _level.map[yVal][xVal];
+        cout<<"CharVal: "<<charVal<<endl;
+        int index = _level.tileMap[charVal];
         if (index == -1){
             continue;
         }

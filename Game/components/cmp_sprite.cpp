@@ -74,6 +74,7 @@ void AnimationComponent::setAnimation(int size, float duration, shared_ptr<Textu
         tempFrame.duration = duration;
         addFrame(tempFrame);
     }
+
 }
 
 void AnimationComponent::setRow(int row) {

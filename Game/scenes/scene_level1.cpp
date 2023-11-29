@@ -30,7 +30,6 @@ void Level1Scene::Load() {
         psprite->getSprite().setOrigin(16.f, 16.f);
 //        psprite->getSprite().setScale(1.5f, 1.5f);
         auto animComp = player->addComponent<AnimationComponent>();
-        animComp->setAnimation(11, .05, idleTexture, *playerRect);
         player->addComponent<PlayerPhysicsComponent>(Vector2f(16.f, 30));
     }
 

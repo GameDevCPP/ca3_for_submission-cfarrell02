@@ -32,7 +32,7 @@ bool PlayerPhysicsComponent::isGrounded() const {
 
 void PlayerPhysicsComponent::SetAnimation(string textureUrl, int frames, float frameTime, Entity* player){
     //TODO Update to not load texture every time
-    cout<<"Setting Animation: "<<textureUrl<<endl;
+//    cout<<"Setting Animation: "<<textureUrl<<endl;
     auto idleSprite = Resources::get<sf::Texture>(textureUrl);
     player->GetCompatibleComponent<SpriteComponent>()[0]->getSprite().setTexture(*idleSprite);
     player->GetCompatibleComponent<AnimationComponent>()[0]->setAnimation(frames, frameTime, idleSprite, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
@@ -92,20 +92,23 @@ void PlayerPhysicsComponent::update(double dt) {
     if(!_grounded){
         // Jumping Texture
         if(_animationState != PlayerAnimationState::JUMPING){
-            SetAnimation("Free/Main Characters/Mask Dude/Jump (32x32) 2.png", 8, .2, _parent);
+            cout<<"Jumping"<<endl;
+            SetAnimation("Free/Main Characters/Ninja Frog/Jump (32x32) 2.png", 9, .2, _parent);
             _animationState = PlayerAnimationState::JUMPING;
         }
     }
     else if(Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::D)) {
         // Running Texture
         if(_animationState != PlayerAnimationState::WALKING){
-            SetAnimation("Free/Main Characters/Mask Dude/Run (32x32).png", 8, 0.05, _parent);
+            cout<<"Walking"<<endl;
+            SetAnimation("Free/Main Characters/Ninja Frog/Run (32x32).png", 8, 0.05, _parent);
             _animationState = PlayerAnimationState::WALKING;
         }
     }else {
         // Back to Idle Texture
         if (_animationState != PlayerAnimationState::IDLE) {
-            SetAnimation("Free/Main Characters/Mask Dude/Idle (32x32).png", 11, 0.05, _parent);
+            cout<<"Idle"<<endl;
+            SetAnimation("Free/Main Characters/Ninja Frog/Idle (32x32).png", 11, 0.05, _parent);
             _animationState = PlayerAnimationState::IDLE;
         }
     }
