@@ -1,6 +1,5 @@
 #include "cmp_player_physics.h"
 #include "system_physics.h"
-#include "system_resources.h"
 #include <LevelSystem.h>
 #include <SFML/Window/Keyboard.hpp>
 
@@ -30,10 +29,9 @@ bool PlayerPhysicsComponent::isGrounded() const {
   return false;
 }
 
-void PlayerPhysicsComponent::SetAnimation(string textureUrl, int frames, float frameTime, Entity* player){
-    //TODO Update to not load texture every time
+void PlayerPhysicsComponent::SetAnimation( PlayerAnimationState state, int frames, float frameTime, Entity* player){
 //    cout<<"Setting Animation: "<<textureUrl<<endl;
-    auto idleSprite = Resources::get<sf::Texture>(textureUrl);
+    auto idleSprite = _animationTextures[state];
     player->GetCompatibleComponent<SpriteComponent>()[0]->getSprite().setTexture(*idleSprite);
     player->GetCompatibleComponent<AnimationComponent>()[0]->setAnimation(frames, frameTime, idleSprite, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
 }
@@ -51,11 +49,13 @@ void PlayerPhysicsComponent::update(double dt) {
       Keyboard::isKeyPressed(Keyboard::D)) {
     // Moving Either Left or Right
     if (Keyboard::isKeyPressed(Keyboard::D)) {
-      if (getVelocity().x < _maxVelocity.x)
-        impulse({(float)(dt * _groundspeed), 0});
+      if (getVelocity().x < _maxVelocity.x) {
+          impulse({(float) (dt * _groundspeed), 0});
+      }
     } else {
-      if (getVelocity().x > -_maxVelocity.x)
-        impulse({-(float)(dt * _groundspeed), 0});
+      if (getVelocity().x > -_maxVelocity.x) {
+          impulse({-(float) (dt * _groundspeed), 0});
+      }
     }
   } else {
     // Dampen X axis movement
@@ -86,29 +86,28 @@ void PlayerPhysicsComponent::update(double dt) {
   auto v = getVelocity();
   v.x = copysign(min(abs(v.x), _maxVelocity.x), v.x);
   v.y = copysign(min(abs(v.y), _maxVelocity.y), v.y);
+
+//  cout<<"Velocity: "<<v.x<<", "<<v.y<<endl;
   setVelocity(v);
 
   // Handle Animation Behaviour
     if(!_grounded){
         // Jumping Texture
         if(_animationState != PlayerAnimationState::JUMPING){
-            cout<<"Jumping"<<endl;
-            SetAnimation("Free/Main Characters/Ninja Frog/Jump (32x32) 2.png", 9, .2, _parent);
+            SetAnimation(PlayerAnimationState::JUMPING, 9, 1, _parent);
             _animationState = PlayerAnimationState::JUMPING;
         }
     }
     else if(Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::D)) {
         // Running Texture
         if(_animationState != PlayerAnimationState::WALKING){
-            cout<<"Walking"<<endl;
-            SetAnimation("Free/Main Characters/Ninja Frog/Run (32x32).png", 8, 0.05, _parent);
+            SetAnimation(PlayerAnimationState::WALKING, 8, 0.05, _parent);
             _animationState = PlayerAnimationState::WALKING;
         }
     }else {
         // Back to Idle Texture
         if (_animationState != PlayerAnimationState::IDLE) {
-            cout<<"Idle"<<endl;
-            SetAnimation("Free/Main Characters/Ninja Frog/Idle (32x32).png", 11, 0.05, _parent);
+            SetAnimation(PlayerAnimationState::IDLE, 11, 0.05, _parent);
             _animationState = PlayerAnimationState::IDLE;
         }
     }

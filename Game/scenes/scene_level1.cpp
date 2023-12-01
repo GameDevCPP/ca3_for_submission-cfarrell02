@@ -17,6 +17,8 @@ void Level1Scene::Load() {
     ls::loadTextureFile("res/img/Free/Terrain/Terrain (16x16).png", 16);
     ls::loadLevelFile("res/level1.json", 40.0f);
 
+
+
   // Create player
     {
         player = makeEntity();
@@ -28,7 +30,7 @@ void Level1Scene::Load() {
         auto psprite = player->addComponent<SpriteComponent>();
         psprite->setTexture(idleTexture);
         psprite->getSprite().setOrigin(16.f, 16.f);
-//        psprite->getSprite().setScale(1.5f, 1.5f);
+
         auto animComp = player->addComponent<AnimationComponent>();
         player->addComponent<PlayerPhysicsComponent>(Vector2f(16.f, 30));
     }

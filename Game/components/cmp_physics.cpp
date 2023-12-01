@@ -7,8 +7,8 @@ using namespace sf;
 using namespace Physics;
 
 void PhysicsComponent::update(double dt) {
-  _parent->setPosition(invert_height(bv2_to_sv2(_body->GetPosition())));
-  _parent->setRotation((180 / b2_pi) * _body->GetAngle());
+    _parent->setPosition(invert_height(bv2_to_sv2(_body->GetPosition())));
+    _parent->setRotation((180 / b2_pi) * _body->GetAngle());
 }
 
 PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
@@ -114,6 +114,7 @@ bool PhysicsComponent::isTouching(const PhysicsComponent& pc) const {
 
 bool PhysicsComponent::isTouching(const PhysicsComponent& pc,
                                   b2Contact const* bc) const {
+
   const auto _otherFixture = pc.getFixture();
   const auto& w = *Physics::GetWorld();
   const auto contactList = w.GetContactList();
