@@ -32,7 +32,7 @@ bool PlayerPhysicsComponent::isGrounded() const {
 void PlayerPhysicsComponent::SetAnimation( PlayerAnimationState state, int frames, float frameTime, Entity* player){
 //    cout<<"Setting Animation: "<<textureUrl<<endl;
     auto idleSprite = _animationTextures[state];
-    player->GetCompatibleComponent<SpriteComponent>()[0]->getSprite().setTexture(*idleSprite);
+    //player->GetCompatibleComponent<SpriteComponent>()[0]->getSprite().setTexture(*idleSprite);
     player->GetCompatibleComponent<AnimationComponent>()[0]->setAnimation(frames, frameTime, idleSprite, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
 }
 
@@ -79,7 +79,7 @@ void PlayerPhysicsComponent::update(double dt) {
     // disable friction while jumping
     setFriction(0.f);
   } else {
-    setFriction(0.1f);
+    setFriction(0.2f);
   }
 
   // Clamp velocity.

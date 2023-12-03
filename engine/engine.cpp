@@ -100,6 +100,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 	//window.setVerticalSyncEnabled(true);
 	_gameName = gameName;
 	_window = &window;
+    _window->setFramerateLimit(60);
 	Renderer::initialise(window);
 	Physics::initialise();
 	ChangeScene(scn);

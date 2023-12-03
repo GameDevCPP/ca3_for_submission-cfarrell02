@@ -2,6 +2,7 @@
 #include "game.h"
 #include "scenes/scene_menu.h"
 #include <JsonReader.h>
+#include <SFML/Graphics.hpp>
 
 
 

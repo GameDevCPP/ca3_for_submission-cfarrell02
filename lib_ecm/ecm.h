@@ -10,124 +10,110 @@ class Entity;
 class Scene;
 
 class Component {
-	friend Entity;
+    friend Entity;
 
 protected:
-	Entity* const _parent;
-	bool _fordeletion; // should be removed
-	explicit Component(Entity* const p);
+    Entity* const _parent;
+    bool _fordeletion; // should be removed
+    explicit Component(Entity* const p);
 
 public:
-	Component() = delete;
+    Component() = delete;
 
-	bool is_fordeletion() const;
+    bool is_fordeletion() const;
 
-	virtual void update(double dt) = 0;
+    virtual void update(double dt) = 0;
 
-	virtual void render() = 0;
+    virtual void render() = 0;
 
-	virtual ~Component();
+    virtual ~Component();
 };
 
 struct EntityManager {
-	std::vector<std::shared_ptr<Entity>> list;
-	void update(double dt);
-	void render();
-	std::vector<std::shared_ptr<Entity>> find(const std::string& tag) const;
-	std::vector<std::shared_ptr<Entity>>
-		find(const std::vector<std::string>& tags) const;
-
-	void addEntity(std::shared_ptr<Entity> entity);
+    std::vector<std::shared_ptr<Entity>> list;
+    void update(double dt);
+    void render();
+    std::vector<std::shared_ptr<Entity>> find(const std::string& tag) const;
+    std::vector<std::shared_ptr<Entity>>
+    find(const std::vector<std::string>& tags) const;
 };
 
 class Entity {
-	friend struct EntityManager;
+    friend struct EntityManager;
 
 protected:
-	std::vector<std::shared_ptr<Component>> _components;
-	sf::Vector2f _position;
-	float _rotation;
-	bool _alive;       // should be updated
-	bool _visible;     // should be rendered
-	bool _fordeletion; // should be deleted
-	std::set<std::string> _tags;
+    std::vector<std::shared_ptr<Component>> _components;
+    sf::Vector2f _position;
+    float _rotation;
+    bool _alive;       // should be updated
+    bool _visible;     // should be rendered
+    bool _fordeletion; // should be deleted
+    std::set<std::string> _tags;
 
 public:
-	void addTag(const std::string& t);
-	const std::set<std::string>& getTags() const;
-	Scene* const scene;
-	Entity(Scene* const s);
-	Entity(const Entity& ent);
-	virtual ~Entity();
+    void addTag(const std::string& t);
+    const std::set<std::string>& getTags() const;
+    Scene* const scene;
+    Entity(Scene* const s);
 
-	virtual void update(double dt);
+    virtual ~Entity();
 
-	virtual void render();
+    virtual void update(double dt);
 
-	//
-	const sf::Vector2f& getPosition() const;
+    virtual void render();
 
-	void setPosition(const sf::Vector2f& _position);
+    //
+    const sf::Vector2f& getPosition() const;
 
-	bool is_fordeletion() const;
+    void setPosition(const sf::Vector2f& _position);
 
-	float getRotation() const;
+    bool is_fordeletion() const;
 
-	void setRotation(float _rotation);
+    float getRotation() const;
 
-	bool isAlive() const;
+    void setRotation(float _rotation);
 
-	void setAlive(bool _alive);
+    bool isAlive() const;
 
-	void setForDelete();
+    void setAlive(bool _alive);
 
-	bool isVisible() const;
+    void setForDelete();
 
-	void setVisible(bool _visible);
+    bool isVisible() const;
 
-	std::vector<std::shared_ptr<Component>> getComponents();
-	void setComponents(std::vector<std::shared_ptr<Component>> components);
+    void setVisible(bool _visible);
 
-	template <typename T, typename... Targs>
-	std::shared_ptr<T> addComponent(Targs... params) {
-		static_assert(std::is_base_of<Component, T>::value, "T != component");
-		std::shared_ptr<T> sp(std::make_shared<T>(this, params...));
-		_components.push_back(sp);
-		return sp;
-	}
-
-	template <typename T>
-	const std::vector<std::shared_ptr<T>> get_components() const {
-		static_assert(std::is_base_of<Component, T>::value, "T != component");
-		std::vector<std::shared_ptr<T>> ret;
-		for (const auto c : _components) {
-			if (typeid(*c) == typeid(T)) {
-				ret.push_back(std::dynamic_pointer_cast<T>(c));
-			}
-		}
-		return std::move(ret);
-	}
-
-    // Remove components of type T
-    template <typename T>
-    void remove_components() {
+    template <typename T, typename... Targs>
+    std::shared_ptr<T> addComponent(Targs... params) {
         static_assert(std::is_base_of<Component, T>::value, "T != component");
-        _components.erase(std::remove_if(_components.begin(), _components.end(), [](std::shared_ptr<Component> c) {
-            return typeid(*c) == typeid(T);
-        }), _components.end());
+        std::shared_ptr<T> sp(std::make_shared<T>(this, params...));
+        _components.push_back(sp);
+        return sp;
     }
 
-	// Will return a T component, or anything derived from a T component.
-	template <typename T>
-	const std::vector<std::shared_ptr<T>> GetCompatibleComponent() {
-		static_assert(std::is_base_of<Component, T>::value, "T != component");
-		std::vector<std::shared_ptr<T>> ret;
-		for (auto c : _components) {
-			auto dd = dynamic_cast<T*>(&(*c));
-			if (dd) {
-				ret.push_back(std::dynamic_pointer_cast<T>(c));
-			}
-		}
-		return ret;
-	}
+    template <typename T>
+    const std::vector<std::shared_ptr<T>> get_components() const {
+        static_assert(std::is_base_of<Component, T>::value, "T != component");
+        std::vector<std::shared_ptr<T>> ret;
+        for (const auto c : _components) {
+            if (typeid(*c) == typeid(T)) {
+                ret.push_back(std::dynamic_pointer_cast<T>(c));
+            }
+        }
+        return std::move(ret);
+    }
+
+    // Will return a T component, or anything derived from a T component.
+    template <typename T>
+    const std::vector<std::shared_ptr<T>> GetCompatibleComponent() {
+        static_assert(std::is_base_of<Component, T>::value, "T != component");
+        std::vector<std::shared_ptr<T>> ret;
+        for (auto c : _components) {
+            auto dd = dynamic_cast<T*>(&(*c));
+            if (dd) {
+                ret.push_back(std::dynamic_pointer_cast<T>(c));
+            }
+        }
+        return ret;
+    }
 };

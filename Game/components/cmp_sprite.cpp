@@ -64,7 +64,8 @@ void AnimationComponent::setAnimation(int size, float duration, shared_ptr<Textu
 {
     auto p = _parent->GetCompatibleComponent<SpriteComponent>().at(0);
     p->setTexture(texture);
-
+    frames.clear();
+    totalLength = 0.f; // Clear out old animation
     for (auto i = 0; i < size; i++)
     {
         Frame tempFrame;
@@ -74,6 +75,7 @@ void AnimationComponent::setAnimation(int size, float duration, shared_ptr<Textu
         tempFrame.duration = duration;
         addFrame(tempFrame);
     }
+
 
 }
 
@@ -114,6 +116,7 @@ void AnimationComponent::update(double dt) {
         }
 
         _parent->GetCompatibleComponent<SpriteComponent>()[0]->setTextureRect(frames[frameCount].rect);
+        cout<<"Frame: "<<frameCount<<endl;
         totalProgress = 0.f;
     }
 }
