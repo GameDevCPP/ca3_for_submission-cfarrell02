@@ -137,17 +137,19 @@ void LevelSystem::buildSprites(bool optimise) {
         auto charVal = _level.map[yVal][xVal];
         int index = _level.tileMap[charVal];
         if (index < 0){
+            // Switch statement for hazards
+            switch (index) {
+                case -1:
+                    continue;
+                case -2:
+                    s->setTexture(&_hazardTextures["spikes"]);
+                    s->setTextureRect({0,0,16,16});
+                    break;
+                default:
+                    break;
+            }
+            _sprites.push_back(std::move(s));
             continue;
-//            if(index == -1) continue;
-//            switch (index) {
-//                case -2:
-//                    s->setTexture(&_hazardTextures["spikes"]);
-//                    break;
-//                default:
-//                    break;
-//            }
-//            _sprites.push_back(std::move(s));
-//            continue;
         }
 
         s->setTextureRect(textures[index]);
