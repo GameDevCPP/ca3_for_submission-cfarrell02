@@ -3,6 +3,7 @@
 #include "../components/cmp_sprite.h"
 #include "../game.h"
 #include "system_resources.h"
+#include "../components/cmp_particle_generator.h"
 #include <LevelSystem.h>
 #include <iostream>
 #include <thread>
@@ -48,6 +49,18 @@ void Level1Scene::Load() {
       e->addComponent<PhysicsComponent>(false, Vector2f(40.f, 40.f));
     }
   }
+
+  // Add in particle generator
+    {
+        auto particle = makeEntity();
+//        particle->setPosition(Vector2f(100, 100));
+//        particle->addComponent<PhysicsComponent>(false, Vector2f(1,1));
+//        auto pSprite = particle->addComponent<SpriteComponent>();
+//        pSprite->setTexture(std::make_shared<sf::Texture>(Resources::get<Texture>("Free/Effects/Particle.png")));
+//    ParticleGenerator(Entity* p, int amount, float life, float speed, float spread, sf::Vector2f position, sf::Texture texture);
+        particle->addComponent<ParticleGenerator>(10, 2.f, 100.f, 100.f, Vector2f(100, 100), Resources::get<Texture>("Free/Traps/Sand Mud Ice/Ice Particle.png"), .1, true);
+
+    }
 
   cout << " Scene 1 Load Done" << endl;
 

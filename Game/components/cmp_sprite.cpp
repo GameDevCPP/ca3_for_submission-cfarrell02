@@ -116,7 +116,7 @@ void AnimationComponent::update(double dt) {
         }
 
         _parent->GetCompatibleComponent<SpriteComponent>()[0]->setTextureRect(frames[frameCount].rect);
-        cout<<"Frame: "<<frameCount<<endl;
+        //cout<<"Frame: "<<frameCount<<endl;
         totalProgress = 0.f;
     }
 }

@@ -73,7 +73,10 @@ file(GLOB_RECURSE GAME_SOURCE_FILES
         "Game/*.h"
 )
 
-add_executable(Platformer ${GAME_SOURCE_FILES})
+add_executable(Platformer ${GAME_SOURCE_FILES}
+        Game/components/cmp_particle_generator.cpp
+        Game/components/cmp_particle_generator.h
+        Game/components/cmp_particle_generator.h)
 target_link_libraries(Platformer lib_engine)
 set(EXECUTABLES ${EXECUTABLES} Platformer)
 
