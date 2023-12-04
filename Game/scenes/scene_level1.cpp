@@ -58,7 +58,8 @@ void Level1Scene::Load() {
 //        auto pSprite = particle->addComponent<SpriteComponent>();
 //        pSprite->setTexture(std::make_shared<sf::Texture>(Resources::get<Texture>("Free/Effects/Particle.png")));
 //    ParticleGenerator(Entity* p, int amount, float life, float speed, float spread, sf::Vector2f position, sf::Texture texture);
-        particle->addComponent<ParticleGenerator>(10, 2.f, 100.f, 100.f, Vector2f(100, 100), Resources::get<Texture>("Free/Traps/Sand Mud Ice/Ice Particle.png"), .1, true);
+        auto pos = ls::getTilePosition(ls::findTiles(ls::PARTICLEGENERATOR)[0]);
+        particle->addComponent<ParticleGenerator>(10, 2.f, 100.f, 100.f, pos, Resources::get<Texture>("Free/Traps/Sand Mud Ice/Ice Particle.png"), .1, true);
 
     }
 

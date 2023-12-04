@@ -32,7 +32,8 @@ public:
         HAZARD = 'h',
 		WAYPOINT = '+',
 		FLOOR = 'f',
-        CEILING = 'c'
+        CEILING = 'c',
+        PARTICLEGENERATOR = 'p',
 	};
 
 	static Tile getTile(sf::Vector2ul);
