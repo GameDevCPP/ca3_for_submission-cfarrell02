@@ -7,11 +7,11 @@
 class PhysicsComponent : public Component {
 protected:
   b2Body* _body;
-  const bool _dynamic;
   b2Fixture* _fixture;
+  b2BodyType _type;
 
 public:
-  PhysicsComponent(Entity* p, bool dyn, const sf::Vector2f& size);
+  explicit PhysicsComponent(Entity* p, b2BodyType, const sf::Vector2f& size);
 
   b2Fixture* const getFixture() const;
   bool isTouching(const PhysicsComponent& pc) const;

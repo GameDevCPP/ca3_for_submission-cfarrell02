@@ -11,13 +11,12 @@ void PhysicsComponent::update(double dt) {
     _parent->setRotation((180 / b2_pi) * _body->GetAngle());
 }
 
-PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
-                                   const Vector2f& size)
-    : Component(p), _dynamic(dyn) {
+PhysicsComponent::PhysicsComponent(Entity* p, b2BodyType dyn, const Vector2f& size)
+    : Component(p), _type(dyn) {
 
   b2BodyDef BodyDef;
   // Is Dynamic(moving), or static(Stationary)
-  BodyDef.type = _dynamic ? b2_dynamicBody : b2_staticBody;
+  BodyDef.type = dyn;
   BodyDef.position = sv2_to_bv2(invert_height(p->getPosition()));
 
   // Create the body
@@ -31,7 +30,7 @@ PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
     b2FixtureDef FixtureDef;
     // Fixture properties
     // FixtureDef.density = _dynamic ? 10.f : 0.f;
-    FixtureDef.friction = _dynamic ? 0.1f : 0.8f;
+    FixtureDef.friction = BodyDef.type == b2_dynamicBody ? 0.1f : 0.4f;
     FixtureDef.restitution = .2;
     FixtureDef.shape = &Shape;
     // Add to body

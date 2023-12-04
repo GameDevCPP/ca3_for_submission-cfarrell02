@@ -124,7 +124,7 @@ void PlayerPhysicsComponent::update(double dt) {
 
 PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
                                                const Vector2f& size)
-    : PhysicsComponent(p, true, size) {
+    : PhysicsComponent(p, b2_dynamicBody, size) {
   _size = sv2_to_bv2(size, true);
   _maxVelocity = Vector2f(200.f, 400.f);
   _groundspeed = 30.f;

@@ -28,7 +28,7 @@ void EnemyTurretComponent::fire() const {
   s->setShape<sf::CircleShape>(8.f);
   s->getShape().setFillColor(Color::Red);
   s->getShape().setOrigin(Vector2f(8.f, 8.f));
-  auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.f, 8.f));
+  auto p = bullet->addComponent<PhysicsComponent>(b2_dynamicBody, Vector2f(8.f, 8.f));
   p->setRestitution(.4f);
   p->setFriction(.005f);
   p->impulse(sf::rotate(Vector2f(0, 15.f), -_parent->getRotation()));

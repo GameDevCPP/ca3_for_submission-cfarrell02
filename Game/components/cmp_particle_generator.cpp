@@ -30,7 +30,7 @@ void ParticleGenerator::regenerateParticle() {
         // Vary position by spread
         auto spread = sf::Vector2f((rand() % (int) _spread) - _spread / 2, (rand() % (int) _spread) - _spread / 2);
         particle->setPosition(_position + spread);
-        particle->addComponent<PhysicsComponent>(true, sf::Vector2f(1, 1));
+        particle->addComponent<PhysicsComponent>(b2_dynamicBody, sf::Vector2f(1, 1));
         auto pSprite = particle->addComponent<SpriteComponent>();
         pSprite->setTexture(_texture);
         _particles.push_back({particle->getPosition(), _velocity, particle, 0.f, _life});

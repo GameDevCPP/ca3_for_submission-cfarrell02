@@ -4,6 +4,7 @@
 #include "../game.h"
 #include "system_resources.h"
 #include "../components/cmp_particle_generator.h"
+#include "../components/cmp_floating_platform.h"
 #include <LevelSystem.h>
 #include <iostream>
 #include <thread>
@@ -46,21 +47,31 @@ void Level1Scene::Load() {
       pos += Vector2f(20.f, 20.f); //offset to center
       auto e = makeEntity();
       e->setPosition(pos);
-      e->addComponent<PhysicsComponent>(false, Vector2f(40.f, 40.f));
+      e->addComponent<PhysicsComponent>(b2_staticBody, Vector2f(40.f, 40.f));
     }
   }
 
   // Add in particle generator
     {
         auto particle = makeEntity();
-//        particle->setPosition(Vector2f(100, 100));
-//        particle->addComponent<PhysicsComponent>(false, Vector2f(1,1));
-//        auto pSprite = particle->addComponent<SpriteComponent>();
-//        pSprite->setTexture(std::make_shared<sf::Texture>(Resources::get<Texture>("Free/Effects/Particle.png")));
-//    ParticleGenerator(Entity* p, int amount, float life, float speed, float spread, sf::Vector2f position, sf::Texture texture);
         auto pos = ls::getTilePosition(ls::findTiles(ls::PARTICLEGENERATOR)[0]);
         particle->addComponent<ParticleGenerator>(10, 2.f, 100.f, 100.f, pos, Resources::get<Texture>("Free/Traps/Sand Mud Ice/Ice Particle.png"), .1, true);
+    }
 
+    //Add in floating platform
+    {
+        auto platform = makeEntity();
+        auto startPos = ls::getTilePosition(ls::findTiles(ls::WAYPOINT)[0]);
+        auto endPos = ls::getTilePosition(ls::findTiles(ls::WAYPOINT)[1]);
+        auto platformTexture = Resources::get<Texture>("Free/Terrain/Terrain (16x16).png");
+        IntRect platformRect = IntRect(272, 144, 16, 16);
+        auto psprite = platform->addComponent<SpriteComponent>();
+        psprite->setTexture(platformTexture);
+        psprite->getSprite().setTextureRect(platformRect);
+        psprite->getSprite().setScale(2.f, 2.f);
+        psprite->getSprite().setOrigin(8.f, 8.f);
+        platform->addComponent<FloatingPlatformComponent>(startPos, endPos, 50.f);
+        platform->addComponent<PhysicsComponent>(b2_kinematicBody, Vector2f(40.f, 40.f));
     }
 
   cout << " Scene 1 Load Done" << endl;
