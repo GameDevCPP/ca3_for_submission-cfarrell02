@@ -307,9 +307,7 @@ sf::Vector2u Engine::getWindowSize() { return _window->getSize(); }
 
 sf::RenderWindow& Engine::GetWindow() { return *_window; }
 
-Scene *Engine::getActiveScene() {
-    return _activeScene;
-}
+
 
 namespace timing {
 	// Return time since Epoc

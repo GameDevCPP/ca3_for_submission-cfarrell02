@@ -46,9 +46,6 @@ public:
 	static void changeResolution(int x, int y);
 
 	static sf::Vector2f flocking(Entity* thisEnemy, sf::Vector2f toPlayer);
-
-    static Scene* getActiveScene();
-
 private:
 	static Scene* _activeScene;
 	static std::string _gameName;

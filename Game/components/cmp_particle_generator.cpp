@@ -26,7 +26,7 @@ ParticleGenerator::ParticleGenerator(Entity *p, int amount, float life, float sp
 
 void ParticleGenerator::regenerateParticle() {
 
-        auto particle = Engine::getActiveScene()->makeEntity();
+        auto particle = _parent->scene->makeEntity();
         // Vary position by spread
         auto spread = sf::Vector2f((rand() % (int) _spread) - _spread / 2, (rand() % (int) _spread) - _spread / 2);
         particle->setPosition(_position + spread);
@@ -34,7 +34,7 @@ void ParticleGenerator::regenerateParticle() {
         auto pSprite = particle->addComponent<SpriteComponent>();
         pSprite->setTexture(_texture);
         _particles.push_back({particle->getPosition(), _velocity, particle, 0.f, _life});
-        std::cout << "Particle created" << std::endl;
+        //std::cout << "Particle created" << std::endl;
 
 }
 
