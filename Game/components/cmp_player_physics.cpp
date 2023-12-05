@@ -1,7 +1,9 @@
 #include "cmp_player_physics.h"
 #include "system_physics.h"
+#include "engine.h"
 #include <LevelSystem.h>
 #include <SFML/Window/Keyboard.hpp>
+#include "../game.h"
 
 using namespace std;
 using namespace sf;
@@ -123,8 +125,9 @@ void PlayerPhysicsComponent::update(double dt) {
 }
 
 PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
-                                               const Vector2f& size)
-    : PhysicsComponent(p, b2_dynamicBody, size) {
+                                               const Vector2f& size, int health)
+    : PhysicsComponent(p, b2_dynamicBody, size), _health(health),
+      _maxHealth(health) {
   _size = sv2_to_bv2(size, true);
   _maxVelocity = Vector2f(200.f, 400.f);
   _groundspeed = 30.f;
@@ -133,4 +136,16 @@ PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
   _body->SetFixedRotation(true);
   //Bullet items have higher-res collision detection
   _body->SetBullet(true);
+}
+
+void PlayerPhysicsComponent::setHealth(int health) {
+    _health = health;
+    if (_health > _maxHealth) {
+        _health = _maxHealth;
+    }
+    if (_health <= 0) {
+        Engine::ChangeScene(&death);
+        _parent->setForDelete();
+    }
+
 }

@@ -15,6 +15,9 @@ protected:
   sf::Vector2f _maxVelocity;
   bool _grounded;
   float _groundspeed;
+  int _health;
+  const int _maxHealth;
+
   PlayerAnimationState _animationState = PlayerAnimationState::IDLE;
     std::map<PlayerAnimationState, std::shared_ptr<sf::Texture>> _animationTextures =
             {
@@ -23,14 +26,18 @@ protected:
                     {PlayerAnimationState::JUMPING, Resources::get<sf::Texture>("Free/Main Characters/Ninja Frog/Jump (32x32) 2.png")}
             };
 
-    void SetAnimation(PlayerAnimationState state, int frames, float frameTime,Entity* player);
+  void SetAnimation(PlayerAnimationState state, int frames, float frameTime,Entity* player);
+
 
   bool isGrounded() const;
 
 public:
   void update(double dt) override;
 
-  explicit PlayerPhysicsComponent(Entity* p, const sf::Vector2f& size);
+  explicit PlayerPhysicsComponent(Entity* p, const sf::Vector2f& size, int health = 100);
 
   PlayerPhysicsComponent() = delete;
+
+  int getHealth() const { return _health; }
+    void setHealth(int health);
 };

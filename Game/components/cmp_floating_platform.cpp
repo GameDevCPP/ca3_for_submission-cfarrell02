@@ -14,21 +14,31 @@ FloatingPlatformComponent::FloatingPlatformComponent(Entity *p, sf::Vector2f sta
 }
 
 void FloatingPlatformComponent::update(double dt) {
-    _time += dt;
     auto dist = _endPos - _startPos;
-    auto dir = dist / std::sqrt(dist.x * dist.x + dist.y * dist.y);
+    auto dir = dist / std::sqrt(dist.x * dist.x + dist.y);
     auto phys = _parent->get_components<PhysicsComponent>().at(0);
     if(phys == nullptr) throw std::runtime_error("FloatingPlatformComponent::update() - no physics component found");
 
-    //TODO Fix to work based on distance rather than time
-    if (_time > 2 * M_PI) {
-        _time -= 2 * M_PI;
-        std::swap(_startPos, _endPos); // Swap start and end positions
-        dir = -dir; // Reverse direction
+    auto pos = _parent->getPosition();
+    float threshold = 5.0f; // Adjust the threshold distance as needed
+
+    if (_movingToEnd) {
+            dir = {-abs(dir.x), dir.y}; // Reverse direction
+           // std::cout<< "Moving to start" << ", " << dir.x << ", " << dir.y << std::endl;
+    } else {
+            //std::cout<< "Moving to end" << ", " << dir.x << ", " << dir.y << std::endl;
+            dir = {abs(dir.x), dir.y}; // Reverse direction=
     }
 
+    if (pos.x > _endPos.x - threshold && pos.x < _endPos.x + threshold) {
+        _movingToEnd = true;
+    } else if (pos.x > _startPos.x - threshold && pos.x < _startPos.x + threshold) {
+        _movingToEnd = false;
+    }
     phys->setVelocity(dir * _speed);
 }
+
+
 
 
 

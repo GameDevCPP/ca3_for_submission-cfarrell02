@@ -15,6 +15,7 @@ protected:
     sf::Vector2f _endPos;
     float _speed;
     float _time = 0;
+    bool _movingToEnd = true;
 
 public:
     void update(double dt) override;

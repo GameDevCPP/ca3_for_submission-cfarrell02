@@ -77,6 +77,8 @@ void Level1Scene::Load() {
         }
     }
 
+    //TODO - !!!!Separate hazards from level loader and add them in here with new hazard component!!!!
+
   cout << " Scene 1 Load Done" << endl;
 
   setLoaded(true);

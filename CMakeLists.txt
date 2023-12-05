@@ -80,7 +80,13 @@ add_executable(Platformer ${GAME_SOURCE_FILES}
         Game/components/cmp_floating_platform.cpp
         Game/components/cmp_floating_platform.h
         Game/components/cmp_floating_platform.h
-        Game/components/cmp_button.h)
+        Game/components/cmp_button.h
+        Game/scenes/scene_death.cpp
+        Game/scenes/scene_death.h
+        Game/components/cmp_hazard.cpp
+        Game/components/cmp_hazard.h
+        Game/components/cmp_hazard.h
+)
 target_link_libraries(Platformer lib_engine)
 set(EXECUTABLES ${EXECUTABLES} Platformer)
 
