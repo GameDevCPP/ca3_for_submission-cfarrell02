@@ -13,6 +13,6 @@ Level1Scene level1;
 
 
 int main() {
-    Engine::Start(1920 , 1080, "Platformer", &level1);
+    Engine::Start(1920 , 1080, "Platformer", &menu);
     //JsonReader::loadLevel("res/level1.json");
 }

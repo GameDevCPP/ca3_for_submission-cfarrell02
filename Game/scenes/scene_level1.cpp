@@ -60,18 +60,21 @@ void Level1Scene::Load() {
 
     //Add in floating platform
     {
-        auto platform = makeEntity();
-        auto startPos = ls::getTilePosition(ls::findTiles(ls::WAYPOINT)[0]);
-        auto endPos = ls::getTilePosition(ls::findTiles(ls::WAYPOINT)[1]);
-        auto platformTexture = Resources::get<Texture>("Free/Terrain/Terrain (16x16).png");
-        IntRect platformRect = IntRect(272, 144, 16, 16);
-        auto psprite = platform->addComponent<SpriteComponent>();
-        psprite->setTexture(platformTexture);
-        psprite->getSprite().setTextureRect(platformRect);
-        psprite->getSprite().setScale(2.f, 2.f);
-        psprite->getSprite().setOrigin(8.f, 8.f);
-        platform->addComponent<FloatingPlatformComponent>(startPos, endPos, 50.f);
-        platform->addComponent<PhysicsComponent>(b2_kinematicBody, Vector2f(40.f, 40.f));
+        int platformCount = 3;
+        for (int i = 0; i < platformCount; i++) {
+            auto platform = makeEntity();
+            auto startPos = ls::getTilePosition(ls::findTiles(ls::WAYPOINT)[0]) + Vector2f(i*32.f, 0.f);
+            auto endPos = ls::getTilePosition(ls::findTiles(ls::WAYPOINT)[1]) + Vector2f(i*32.f, 0.f);
+            auto platformTexture = Resources::get<Texture>("Free/Terrain/Terrain (16x16).png");
+            IntRect platformRect = IntRect(272, 144, 16, 16);
+            auto psprite = platform->addComponent<SpriteComponent>();
+            psprite->setTexture(platformTexture);
+            psprite->getSprite().setTextureRect(platformRect);
+            psprite->getSprite().setScale(2.f, 2.f);
+            psprite->getSprite().setOrigin(8.f, 8.f);
+            platform->addComponent<FloatingPlatformComponent>(startPos, endPos, 50.f);
+            platform->addComponent<PhysicsComponent>(b2_kinematicBody, Vector2f(40.f, 40.f));
+        }
     }
 
   cout << " Scene 1 Load Done" << endl;

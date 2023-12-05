@@ -20,6 +20,7 @@ void FloatingPlatformComponent::update(double dt) {
     auto phys = _parent->get_components<PhysicsComponent>().at(0);
     if(phys == nullptr) throw std::runtime_error("FloatingPlatformComponent::update() - no physics component found");
 
+    //TODO Fix to work based on distance rather than time
     if (_time > 2 * M_PI) {
         _time -= 2 * M_PI;
         std::swap(_startPos, _endPos); // Swap start and end positions
