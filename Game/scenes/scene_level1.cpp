@@ -5,8 +5,6 @@
 #include "system_resources.h"
 #include "../components/cmp_particle_generator.h"
 #include "../components/cmp_floating_platform.h"
-#include "../components/cmp_hazard.h"
-#include "../components/cmp_hud.h"
 #include <LevelSystem.h>
 #include <iostream>
 #include <thread>
@@ -27,6 +25,7 @@ void Level1Scene::Load() {
     {
         player = makeEntity();
         auto startPos = ls::getTilePosition(ls::findTiles(ls::START)[0]);
+        auto playerRect = new IntRect( {0,0}, Vector2i(32,32) );
 
         player->setPosition(startPos);
         auto idleTexture = Resources::get<Texture>("Free/Main Characters/Mask Dude/Idle (32x32).png");
@@ -35,12 +34,7 @@ void Level1Scene::Load() {
         psprite->getSprite().setOrigin(16.f, 16.f);
 
         auto animComp = player->addComponent<AnimationComponent>();
-        auto pPhys = player->addComponent<PlayerPhysicsComponent>(Vector2f(16.f, 30));
-
-        // Setting up hud
-        auto hud = makeEntity();
-        hud->addComponent<HudComponent>(pPhys);
-
+        player->addComponent<PlayerPhysicsComponent>(Vector2f(16.f, 30));
     }
 
   // Add physics colliders to level tiles.
@@ -83,19 +77,7 @@ void Level1Scene::Load() {
         }
     }
 
-    //TODO - !!!!Separate hazards from level loader and add them in here with new hazard component!!!
-    {
-        auto hazard = makeEntity();
-        auto pos = ls::getTilePosition(ls::findTiles(ls::HAZARD)[0]);
-        hazard->setPosition(pos);
-        auto hazardTexture = Resources::get<Texture>("Free/Traps/Spikes/Idle.png");
-        auto hsprite = hazard->addComponent<SpriteComponent>();
-        hsprite->setTexture(hazardTexture);
-        //hsprite->getSprite().setOrigin(16.f, 16.f);
-        hsprite->getSprite().setScale(2.5f, 2.5f);
-        auto hHazard = hazard->addComponent<HazardComponent>(10, player);
-
-    }
+    //TODO - !!!!Separate hazards from level loader and add them in here with new hazard component!!!!
 
   cout << " Scene 1 Load Done" << endl;
 

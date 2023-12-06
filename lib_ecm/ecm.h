@@ -22,8 +22,6 @@ public:
 
     bool is_fordeletion() const;
 
-    void setForDelete();
-
     virtual void update(double dt) = 0;
 
     virtual void render() = 0;

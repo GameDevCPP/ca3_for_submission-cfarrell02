@@ -86,7 +86,6 @@ add_executable(Platformer ${GAME_SOURCE_FILES}
         Game/components/cmp_hazard.cpp
         Game/components/cmp_hazard.h
         Game/components/cmp_hazard.h
-        Game/components/cmp_hud.h
 )
 target_link_libraries(Platformer lib_engine)
 set(EXECUTABLES ${EXECUTABLES} Platformer)

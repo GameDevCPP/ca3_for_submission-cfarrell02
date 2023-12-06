@@ -27,6 +27,7 @@ size_t LevelSystem::_height;
 sf::Texture LevelSystem::_texture;
 std::vector<sf::IntRect> LevelSystem::textures;
 LevelSystem::Level LevelSystem::_level;
+std::map<string, Texture> LevelSystem::_hazardTextures;
 
 float LevelSystem::_tileSize(100.f);
 Vector2f LevelSystem::_offset(0.0f, 0.0f);
@@ -40,6 +41,12 @@ void LevelSystem::loadTextureFile(const std::string &, float tileSize) {
     if (!_texture.loadFromFile("res/img/Free/Terrain/Terrain (16x16).png")) {
         throw string("Couldn't load tilemap");
     }
+    Texture hazardTexture;
+    if(!hazardTexture.loadFromFile("res/img/Free/Traps/Spikes/Idle.png"))
+    {
+        throw string("Couldn't load spike texture");
+    }
+    _hazardTextures.insert(std::pair<string, Texture>("spikes", hazardTexture));
     // Get tilemap size
     w = _texture.getSize().x / tileSize;
     h = _texture.getSize().y / tileSize;
@@ -130,7 +137,18 @@ void LevelSystem::buildSprites(bool optimise) {
         auto charVal = _level.map[yVal][xVal];
         int index = _level.tileMap[charVal];
         if (index < 0){
-            //Negative number means not a tile
+            // Switch statement for hazards
+            switch (index) {
+                case -1:
+                    continue;
+                case -2:
+                    s->setTexture(&_hazardTextures["spikes"]);
+                    s->setTextureRect({0,0,16,16});
+                    break;
+                default:
+                    break;
+            }
+            _sprites.push_back(std::move(s));
             continue;
         }
 

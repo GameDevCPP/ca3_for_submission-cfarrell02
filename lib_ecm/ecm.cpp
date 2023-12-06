@@ -84,11 +84,6 @@ Component::~Component() {}
 
 bool Component::is_fordeletion() const { return _fordeletion; }
 
-void Component::setForDelete() {
-    _fordeletion = true;
-    _parent->setForDelete();
-}
-
 void EntityManager::update(double dt) {
     for (size_t i = 0; i < list.size(); i++) {
         if (list[i]->is_fordeletion()) {
