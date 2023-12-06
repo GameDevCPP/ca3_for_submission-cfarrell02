@@ -11,11 +11,14 @@
 class HazardComponent : public Component {
 protected:
     int _damage;
+    std::shared_ptr<Entity> _player;
+    float _timer = 0.0f;
+    float _rate;
 
 public:
     void update(double dt) override;
     void render() override ;
-    explicit HazardComponent(Entity* p, int damage);
+    explicit HazardComponent(Entity* p, int damage, std::shared_ptr<Entity> player, float rate = 0.1f);
     HazardComponent() = delete;
     int getDamage() {return _damage;}
     void setDamage(int damage) {_damage = damage;}
