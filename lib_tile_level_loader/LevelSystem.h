@@ -75,8 +75,6 @@ protected:
 	static size_t _width;
 	static size_t _height;
 	static sf::Vector2f _offset;
-    static std::map<std::string, sf::Texture>_hazardTextures;
-
 	static std::vector<std::unique_ptr<sf::RectangleShape>> _sprites;
     static sf::Texture _texture;
 

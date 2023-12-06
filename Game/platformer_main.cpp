@@ -14,6 +14,6 @@ DeathScene death;
 
 
 int main() {
-    Engine::Start(1920 , 1080, "Platformer", &death);
+    Engine::Start(1920 , 1080, "Platformer", &menu);
     //JsonReader::loadLevel("res/level1.json");
 }
