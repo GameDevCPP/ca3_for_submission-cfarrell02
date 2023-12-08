@@ -34,11 +34,11 @@ void DeathScene::Load() {
 }
 
 void DeathScene::Update(const double& dt) {
-    // cout << "Menu Update "<<dt<<"\n";
     auto startButtonComponent = _startButton->get_components<Button>()[0];
+
     if (startButtonComponent->isPressed()) {
-        cout << "Start pressed\n";
-        Engine::ChangeScene(&level1);
+        cout<< startButtonComponent->buttonState << endl;
+        Engine::ChangeScene(&menu);
     }
 
     Scene::Update(dt);

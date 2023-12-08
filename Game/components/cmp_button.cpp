@@ -19,6 +19,7 @@ Sound soundClick;
 void Button::update(double dt) {
     Vector2f point = Vector2f(Mouse::getPosition(Engine::GetWindow()));
 
+
     // Hover statement
     if (shape.getGlobalBounds().contains(point))
     {
@@ -33,6 +34,7 @@ void Button::update(double dt) {
                 _mouseState = BUTTON_ACTIVED;
             else if (_mouseState == BUTTON_ACTIVED)
                 _mouseState = BUTTON_DOWN;
+
         }
         else
         {
@@ -70,6 +72,7 @@ Button::Button(Entity* p, sf::Vector2f position, std::string text, sf::Color idl
     shape.setSize(sf::Vector2f(200, 70));
     shape.setPosition(position - (shape.getSize() / 2.f));
     shape.setOrigin(0, 0);
+    _mouseState = BUTTON_IDLE;
 
     _text.setString(text);
     _text.setFillColor(sf::Color::Black);
@@ -94,13 +97,14 @@ Button::Button(Entity* p, sf::Vector2f position, std::string text, sf::Color idl
 }
 
 // Returns true if button is pressed and false otherwise
-const bool Button::isPressed() const
+bool Button::isPressed() const
 {
     if (buttonState == BUTTON_ACTIVED)
     {
         if (_mouseState == BUTTON_ACTIVED)
             return true;
     }
+//return buttonState == BUTTON_ACTIVED;
 
     return false;
 }

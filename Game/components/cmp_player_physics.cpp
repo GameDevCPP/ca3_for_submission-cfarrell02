@@ -119,8 +119,6 @@ void PlayerPhysicsComponent::update(double dt) {
     }else if (getVelocity().x < 0) {
         _parent->GetCompatibleComponent<SpriteComponent>()[0]->getSprite().setScale(-1, 1);
     }
-    //Temp print health
-    cout<<"Health: "<<_health<<endl;
 
   PhysicsComponent::update(dt);
 }

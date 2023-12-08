@@ -32,7 +32,7 @@ public:
     void render() override;
     ~Button() override = default;
 
-    const bool isPressed() const;
+    bool isPressed() const;
 
     static button_states _mouseState;
 };

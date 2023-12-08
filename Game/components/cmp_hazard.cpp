@@ -20,12 +20,16 @@ void HazardComponent::update(double dt) {
     }
 
     auto playerPos = _player-> getPosition();
+    playerPos.x += 32;
+    playerPos.y += 32;
 
+    auto hazardSpriteBounds = _parent->get_components<SpriteComponent>().at(0)->getSprite().getLocalBounds();
     auto pos = _parent->getPosition();
-
-    float threshold = 5.0f; // Adjust the threshold distance as needed
-    cout<<"Player Pos: "<<playerPos.x<<", "<<playerPos.y<<endl;
-    if (playerPos.x > pos.x - threshold && playerPos.x < pos.x + threshold) {
+    hazardSpriteBounds.left = pos.x;
+    hazardSpriteBounds.top = pos.y;
+//    cout<<"Player Pos: "<<playerPos.x<<", "<<playerPos.y<<endl;
+//    cout<<"Hazard Pos: "<<hazardSpriteBounds.left<<" + "<<hazardSpriteBounds.left + hazardSpriteBounds.width<<", "<<hazardSpriteBounds.top<<" + "<<hazardSpriteBounds.top + hazardSpriteBounds.height<<endl;
+    if (hazardSpriteBounds.contains(playerPos.x, playerPos.y)) {
             //Player is in contact with hazard
             std::cout << "_player is in contact with hazard" << std::endl;
             auto playerPhysics = _player->get_components<PlayerPhysicsComponent>().at(0);
