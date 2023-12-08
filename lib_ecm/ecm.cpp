@@ -73,6 +73,8 @@ Entity::~Entity() {
     }
 
     if (_components.size() > 0) {
+        cout<<"Components left: "<<_components.size()<<endl;
+        cout<<"Last component: "<<_components[0]<<endl;
         throw std::runtime_error(
                 "Can't delete entity, someone is grabbing a component!");
     }

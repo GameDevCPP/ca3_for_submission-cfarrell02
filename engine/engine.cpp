@@ -268,7 +268,8 @@ sf::Vector2f Engine::flocking(Entity* thisEnemy, Vector2f toPlayer)
 	return movement;
 }
 
-void Scene::Update(const double& dt) { ents.update(dt); }
+void Scene::Update(const double& dt) {
+    ents.update(dt); }
 
 void Scene::Render() { ents.render(); }
 

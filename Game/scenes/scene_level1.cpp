@@ -83,7 +83,6 @@ void Level1Scene::Load() {
         }
     }
 
-    //TODO - !!!!Separate hazards from level loader and add them in here with new hazard component!!!
     {
         auto hazard = makeEntity();
         auto pos = ls::getTilePosition(ls::findTiles(ls::HAZARD)[0]);
@@ -111,9 +110,8 @@ void Level1Scene::UnLoad() {
 
 void Level1Scene::Update(const double& dt) {
 
-  if (ls::getTileAt(player->getPosition()) == ls::END) {
-    Engine::ChangeScene((Scene*)&menu);
-    return;
+  if (player->get_components<PlayerPhysicsComponent>()[0]->getHealth() <= 0) {
+      Engine::ChangeScene(&death);
   }
   Scene::Update(dt);
 }

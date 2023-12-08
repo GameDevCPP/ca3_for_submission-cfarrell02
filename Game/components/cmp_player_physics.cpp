@@ -145,8 +145,8 @@ void PlayerPhysicsComponent::setHealth(int health) {
         _health = _maxHealth;
     }
     if (_health <= 0) {
-        Engine::ChangeScene(&death);
         _parent->setForDelete();
+        _health = 0;
     }
 
 }
