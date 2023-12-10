@@ -84,14 +84,14 @@ void Level1Scene::Load() {
     }
 
     {
-        //TODO: Fix this spawning in the wrong place
         auto hazard = makeEntity();
         auto pos = ls::getTilePosition(ls::findTiles(ls::HAZARD)[0]);
+//        pos = {pos.x + 40, pos.y + 40};
         hazard->setPosition(pos);
         auto hazardTexture = Resources::get<Texture>("Free/Traps/Spikes/Idle.png");
         auto hsprite = hazard->addComponent<SpriteComponent>();
         hsprite->setTexture(hazardTexture);
-        hsprite->getSprite().setOrigin(16.f, 16.f);
+        //hsprite->getSprite().setOrigin(16.f, 16.f);
         hsprite->getSprite().setScale(2.5f, 2.5f);
         auto hHazard = hazard->addComponent<HazardComponent>(10, player);
 
