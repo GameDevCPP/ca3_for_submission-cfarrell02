@@ -6,22 +6,21 @@
 #define DROP_POD_CMP_NEXT_LEVEL_H
 #include "ecm.h"
 #include "engine.h"
+#include "../game.h"
 #include "cmp_sprite.h"
 
-template<typename T>
 class NextLevelComponent : public Component {
 public:
     void update(double dt) override;
     void render() override ;
-    explicit NextLevelComponent(Entity* p, T* scene, std::shared_ptr<Entity> player, bool isEndGame = false);
+    explicit NextLevelComponent(Entity* p, std::shared_ptr<Entity> player, std::shared_ptr<Scene> scene, bool isEndGame = false);
     NextLevelComponent() = delete;
-    bool getIsEndGame() {return _isEndGame;}
-    void setIsEndGame(bool isEndGame) {_isEndGame = isEndGame;}
 
 protected:
-    bool _isEndGame;
     std::shared_ptr<Entity> _player;
-    T* _scene;
+    std::shared_ptr<Scene> _scene;
+    bool _isEndGame;
+
 
 };
 

@@ -126,19 +126,19 @@ void Level1Scene::Load() {
     }
 
     //TODO End level point
-//    {
-//        auto end = makeEntity();
-//        auto pos = ls::getTilePosition(ls::findTiles(ls::ENDLEVEL)[0]);
-//        pos = {pos.x + 20, pos.y + 30};
-//        end->setPosition(pos);
-//        auto endTexture = Resources::get<Texture>("Free/Items/Checkpoints/Checkpoint (Flag Idle)(64x64).png");
-//        auto esprite = end->addComponent<SpriteComponent>();
-//        esprite->setTexture(endTexture);
-//        esprite->getSprite().setOrigin(32.f, 32.f);
-//        esprite->getSprite().setScale(1.5f, 1.5f);;
-//        end->addComponent<NextLevelComponent<Level1Scene>>(&level1, player);
-//
-//    }
+    {
+        auto end = makeEntity();
+        auto pos = ls::getTilePosition(ls::findTiles(ls::ENDLEVEL)[0]);
+        pos.y += 10; // Offset the flad to be on the ground
+        end->setPosition(pos);
+        auto endTexture = Resources::get<Texture>("Free/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)(64x64).png");
+        auto esprite = end->addComponent<SpriteComponent>();
+        esprite->setTexture(endTexture);
+        esprite->getSprite().setOrigin(32.f, 32.f);
+        auto animComp = end->addComponent<AnimationComponent>();
+        animComp->setAnimation(10, .1, endTexture, IntRect(Vector2i(0, 0), Vector2i(64, 64)));
+        end->addComponent<NextLevelComponent >(player,std::make_shared<Level1Scene>(), false);
+    }
 
     gameView.setSize(Engine::GetWindow().getSize().x, Engine::GetWindow().getSize().y);
 
