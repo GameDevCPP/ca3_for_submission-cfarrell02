@@ -18,10 +18,13 @@ void HazardComponent::update(double dt) {
     else {
         return;
     }
-    
-    auto hazardBounds = _parent->get_components<SpriteComponent>().at(0)->getSprite().getGlobalBounds();
+
+    //auto hazardBounds = _parent->get_components<SpriteComponent>().at(0)->getSprite().getGlobalBounds();
     auto playerBounds = _player->get_components<SpriteComponent>().at(0)->getSprite().getGlobalBounds();
-    if (hazardBounds.intersects(playerBounds)) {
+    auto hazardPos = _parent->getPosition();
+    hazardPos.x += 16;
+    hazardPos.y += 24;
+    if (playerBounds.contains(hazardPos)){
             //Player is in contact with hazard
             std::cout << "_player is in contact with hazard" << std::endl;
             auto playerPhysics = _player->get_components<PlayerPhysicsComponent>().at(0);

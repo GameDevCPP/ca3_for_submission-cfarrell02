@@ -32,6 +32,9 @@ public:
         HAZARD = 'h',
 		WAYPOINT = '+',
 		FLOOR = 'f',
+        SCORE = 'o',
+        HEALTH = 'l',
+        ENDLEVEL = 'x',
         CEILING = 'c',
         PARTICLEGENERATOR = 'p',
 	};

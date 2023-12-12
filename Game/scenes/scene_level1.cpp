@@ -6,7 +6,8 @@
 #include "../components/cmp_particle_generator.h"
 #include "../components/cmp_floating_platform.h"
 #include "../components/cmp_hazard.h"
-#include "../components/cmp_hud.h"
+#include "../components/cmp_pickup.h"
+#include "../components/cmp_next_level.h"
 #include <LevelSystem.h>
 #include <iostream>
 #include <thread>
@@ -14,7 +15,6 @@
 using namespace std;
 using namespace sf;
 
-static shared_ptr<Entity> player;
 
 void Level1Scene::Load() {
     cout << " Scene 1 Load" << endl;
@@ -37,9 +37,7 @@ void Level1Scene::Load() {
         auto animComp = player->addComponent<AnimationComponent>();
         auto pPhys = player->addComponent<PlayerPhysicsComponent>(Vector2f(16.f, 30));
 
-        // Setting up hud
-        auto hud = makeEntity();
-        hud->addComponent<HudComponent>(pPhys);
+
 
 
     auto walls = ls::findTiles(ls::WALL);
@@ -90,6 +88,66 @@ void Level1Scene::Load() {
         auto hHazard = hazard->addComponent<HazardComponent>(10, player);
 
     }
+    {
+        auto pickupLocations = ls::findTiles(ls::SCORE);
+        for(auto p : pickupLocations){
+            auto pos = ls::getTilePosition(p);
+            pos = {pos.x + 20, pos.y + 30};
+            auto pickup = makeEntity();
+            pickup->setPosition(pos);
+            cout<<"Pickup at: "<<pos.x<<", "<<pos.y<<endl;
+            auto pickupTexture = Resources::get<Texture>("Free/Items/Fruits/Apple.png");
+            cout<<"Pickup Texture: "<<pickupTexture->getSize().x<<", "<<pickupTexture->getSize().y<<endl;
+            auto psprite = pickup->addComponent<SpriteComponent>();
+            psprite->setTexture(pickupTexture);
+            psprite->getSprite().setOrigin(16.f, 16.f);
+            auto animComp = pickup->addComponent<AnimationComponent>();
+            animComp->setAnimation(17, .1, pickupTexture, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
+            pickup->addComponent<PickupComponent>(PickupComponent::PickupType::SCORE, 10, player);
+        }
+    }
+    {
+        auto pickupLocations = ls::findTiles(ls::HEALTH);
+        for(auto p : pickupLocations){
+            auto pos = ls::getTilePosition(p);
+            pos = {pos.x + 20, pos.y + 30};
+            auto pickup = makeEntity();
+            pickup->setPosition(pos);
+            cout<<"Pickup at: "<<pos.x<<", "<<pos.y<<endl;
+            auto pickupTexture = Resources::get<Texture>("Free/Items/Fruits/Pineapple.png");
+            cout<<"Pickup Texture: "<<pickupTexture->getSize().x<<", "<<pickupTexture->getSize().y<<endl;
+            auto psprite = pickup->addComponent<SpriteComponent>();
+            psprite->setTexture(pickupTexture);
+            psprite->getSprite().setOrigin(16.f, 16.f);
+            auto animComp = pickup->addComponent<AnimationComponent>();
+            animComp->setAnimation(17, .1, pickupTexture, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
+            pickup->addComponent<PickupComponent>(PickupComponent::PickupType::HEALTH, 10, player);
+        }
+    }
+
+    //TODO End level point
+//    {
+//        auto end = makeEntity();
+//        auto pos = ls::getTilePosition(ls::findTiles(ls::ENDLEVEL)[0]);
+//        pos = {pos.x + 20, pos.y + 30};
+//        end->setPosition(pos);
+//        auto endTexture = Resources::get<Texture>("Free/Items/Checkpoints/Checkpoint (Flag Idle)(64x64).png");
+//        auto esprite = end->addComponent<SpriteComponent>();
+//        esprite->setTexture(endTexture);
+//        esprite->getSprite().setOrigin(32.f, 32.f);
+//        esprite->getSprite().setScale(1.5f, 1.5f);;
+//        end->addComponent<NextLevelComponent<Level1Scene>>(&level1, player);
+//
+//    }
+
+    gameView.setSize(Engine::GetWindow().getSize().x, Engine::GetWindow().getSize().y);
+
+    auto font = Resources::get<sf::Font>("RobotoMono-Regular.ttf");
+
+    scoreText.setFont(*font);
+    scoreText.setCharacterSize(24);
+    healthText.setFont(*font);
+    healthText.setCharacterSize(24);
 
   cout << " Scene 1 Load Done" << endl;
 
@@ -108,10 +166,20 @@ void Level1Scene::Update(const double& dt) {
   if (player->get_components<PlayerPhysicsComponent>()[0]->getHealth() <= 0) {
       Engine::ChangeScene(&death);
   }
+  gameView.setCenter(player->getPosition());
+  scoreText.setString("Score: " + to_string(player->get_components<PlayerPhysicsComponent>()[0]->getScore()));
+  healthText.setString("Health: " + to_string(player->get_components<PlayerPhysicsComponent>()[0]->getHealth()));
+
+  scoreText.setPosition(gameView.getCenter().x - gameView.getSize().x / 2, gameView.getCenter().y - gameView.getSize().y / 2);
+    healthText.setPosition(gameView.getCenter().x - gameView.getSize().x / 2, gameView.getCenter().y - gameView.getSize().y / 2 + 30);
+
+  Engine::GetWindow().setView(gameView);
   Scene::Update(dt);
 }
 
 void Level1Scene::Render() {
   ls::render(Engine::GetWindow());
+    Engine::GetWindow().draw(scoreText);
+    Engine::GetWindow().draw(healthText);
   Scene::Render();
 }

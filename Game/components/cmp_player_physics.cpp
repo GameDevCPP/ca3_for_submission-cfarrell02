@@ -148,3 +148,11 @@ void PlayerPhysicsComponent::setHealth(int health) {
     }
 
 }
+
+void PlayerPhysicsComponent::setScore(int score) {
+    _score = score;
+    if (_score < 0) {
+        _score = 0;
+    }
+
+}

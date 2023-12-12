@@ -17,6 +17,7 @@ protected:
   float _groundspeed;
   int _health;
   const int _maxHealth;
+    int _score;
 
   PlayerAnimationState _animationState = PlayerAnimationState::IDLE;
     std::map<PlayerAnimationState, std::shared_ptr<sf::Texture>> _animationTextures =
@@ -40,4 +41,6 @@ public:
 
   int getHealth() const { return _health; }
     void setHealth(int health);
+    int getScore() const { return _score; }
+    void setScore(int score);
 };

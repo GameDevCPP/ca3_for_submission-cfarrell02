@@ -55,7 +55,7 @@ void ParticleGenerator::update(double dt) {
             auto particlePos = p.entity->getPosition();
             if (playerBounds.contains(particlePos)){
                 auto playerPhysics = _player->get_components<PlayerPhysicsComponent>().at(0);
-                playerPhysics->setHealth(playerPhysics->getHealth() - 1);
+                playerPhysics->setHealth(playerPhysics->getHealth() - 5);
             }
         }
     }
