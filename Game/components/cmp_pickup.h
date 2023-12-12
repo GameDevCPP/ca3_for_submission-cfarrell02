@@ -6,7 +6,7 @@
 #define DROP_POD_CMP_PICKUP_H
 
 #include "ecm.h"
-
+#include "SFML/Audio/Sound.hpp"
 
 
 class PickupComponent : public Component {

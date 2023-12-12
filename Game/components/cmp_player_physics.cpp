@@ -131,13 +131,25 @@ PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
   _maxVelocity = Vector2f(200.f, 400.f);
   _groundspeed = 30.f;
   _grounded = false;
+  _score = 0;
   _body->SetSleepingAllowed(false);
   _body->SetFixedRotation(true);
   //Bullet items have higher-res collision detection
   _body->SetBullet(true);
+    hurt_sound_buffer = Resources::get<SoundBuffer>("Hit.wav");
+    pickup_sound_buffer = Resources::get<SoundBuffer>("Pickup.wav");
 }
 
 void PlayerPhysicsComponent::setHealth(int health) {
+    if (health < _health) {
+        soundClick.setBuffer(*hurt_sound_buffer);
+        soundClick.play();
+    }
+    else if (health > _health) {
+        soundClick.setBuffer(*pickup_sound_buffer);
+        soundClick.play();
+    }
+
     _health = health;
     if (_health > _maxHealth) {
         _health = _maxHealth;
@@ -150,6 +162,10 @@ void PlayerPhysicsComponent::setHealth(int health) {
 }
 
 void PlayerPhysicsComponent::setScore(int score) {
+    if (score > _score) {
+        soundClick.setBuffer(*pickup_sound_buffer);
+        soundClick.play();
+    }
     _score = score;
     if (_score < 0) {
         _score = 0;

@@ -14,13 +14,16 @@ protected:
   b2Vec2 _size;
   sf::Vector2f _maxVelocity;
   bool _grounded;
+  std::shared_ptr<sf::SoundBuffer> hurt_sound_buffer;
+    std::shared_ptr<sf::SoundBuffer> pickup_sound_buffer;
+  sf::Sound soundClick;
   float _groundspeed;
   int _health;
   const int _maxHealth;
-    int _score;
+  int _score;
 
   PlayerAnimationState _animationState = PlayerAnimationState::IDLE;
-    std::map<PlayerAnimationState, std::shared_ptr<sf::Texture>> _animationTextures =
+  std::map<PlayerAnimationState, std::shared_ptr<sf::Texture>> _animationTextures =
             {
                     {PlayerAnimationState::IDLE, Resources::get<sf::Texture>("Free/Main Characters/Ninja Frog/Idle (32x32).png")},
                     {PlayerAnimationState::WALKING, Resources::get<sf::Texture>("Free/Main Characters/Ninja Frog/Run (32x32).png")},

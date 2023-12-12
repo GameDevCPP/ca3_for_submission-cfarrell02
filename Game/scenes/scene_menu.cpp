@@ -13,13 +13,13 @@ void MenuScene::Load() {
   cout << "Menu Load \n";
   {
     auto txt = makeEntity();
-    txt->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2.0f,
-                              Engine::GetWindow().getSize().y / 2.0f));
+    txt->setPosition(Vector2f(Engine::GetWindow().getSize().x / 2.0f - 50,
+                              Engine::GetWindow().getSize().y / 2.0f-100));
       auto s = txt->addComponent<ShapeComponent>();
-      s->setShape<sf::RectangleShape>(Vector2f(320.0f, 100.0f));
+      s->setShape<sf::RectangleShape>(Vector2f(330.0f, 100.0f));
       s->getShape().setOrigin(100.0f, 25.0f);
-    auto t = txt->addComponent<TextComponent>("Platformer");
-    //t->SetPosition(Vector2f(100.0f, 100.0f));
+    auto t = txt->addComponent<TextComponent>("Deadly Rain");
+//    t->SetPosition(Vector2f(10,0));
     t->SetCharacterSize(50U);
     t->SetColor(Color::Red);
 
@@ -28,6 +28,7 @@ void MenuScene::Load() {
     auto button = _startButton->addComponent<Button>(Vector2f(Engine::GetWindow().getSize().x / 2.0f,
                                                      Engine::GetWindow().getSize().y / 2.0f + 100.0f),
                                            "Start", Color::White, Color::Red, Color::Blue);
+
 
   }
   setLoaded(true);
