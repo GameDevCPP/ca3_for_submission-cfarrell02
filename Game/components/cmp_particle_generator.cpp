@@ -2,10 +2,12 @@
 #include "engine.h"
 #include "cmp_sprite.h"
 #include "cmp_physics.h"
+#include "cmp_player_physics.h"
 #include <iostream>
+#include <utility>
 
 ParticleGenerator::ParticleGenerator(Entity *p, int amount, float life, float speed, float spread,
-                                     sf::Vector2f position, std::shared_ptr<sf::Texture> texture,
+                                     sf::Vector2f position, std::shared_ptr<sf::Texture> texture,std::shared_ptr<Entity> player,
                                      float rate, bool loop)
         : Component(p),
           _amount(amount),
@@ -16,12 +18,12 @@ ParticleGenerator::ParticleGenerator(Entity *p, int amount, float life, float sp
           _texture(std::move(texture)),
           _loop(loop),
           _active(true),
+          _player(std::move(player)),
           _rate(rate){
 
     for (int i = 0; i < _amount; ++i) {
         regenerateParticle();
     }
-    //regenerateParticles();
 }
 
 void ParticleGenerator::regenerateParticle() {
@@ -48,7 +50,13 @@ void ParticleGenerator::update(double dt) {
             p.entity->setForDelete();
             _particles.erase(_particles.begin() + i);
             --i;
-            //regenerateParticle();
+            //Check for contact with player
+            auto playerBounds = _player->get_components<SpriteComponent>().at(0)->getSprite().getGlobalBounds();
+            auto particlePos = p.entity->getPosition();
+            if (playerBounds.contains(particlePos)){
+                auto playerPhysics = _player->get_components<PlayerPhysicsComponent>().at(0);
+                playerPhysics->setHealth(playerPhysics->getHealth() - 1);
+            }
         }
     }
     if (_rate > 0) {
@@ -60,11 +68,8 @@ void ParticleGenerator::update(double dt) {
             }
         }
     }
-//    if (_particles.empty() && _loop) {
-//        regenerateParticles();
-//    }
-
 }
+
 
 void ParticleGenerator::render() {
     for (auto &p : _particles) {

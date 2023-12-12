@@ -41,10 +41,7 @@ void Level1Scene::Load() {
         auto hud = makeEntity();
         hud->addComponent<HudComponent>(pPhys);
 
-    }
 
-  // Add physics colliders to level tiles.
-  {
     auto walls = ls::findTiles(ls::WALL);
     auto floors = ls::findTiles(ls::FLOOR);
     walls.insert(walls.end(), floors.begin(), floors.end());
@@ -55,13 +52,10 @@ void Level1Scene::Load() {
       e->setPosition(pos);
       e->addComponent<PhysicsComponent>(b2_staticBody, Vector2f(40.f, 40.f));
     }
-  }
 
-  // Add in particle generator
-    {
         auto particle = makeEntity();
         auto pos = ls::getTilePosition(ls::findTiles(ls::PARTICLEGENERATOR)[0]);
-        particle->addComponent<ParticleGenerator>(10, 2.f, 100.f, 100.f, pos, Resources::get<Texture>("Free/Traps/Sand Mud Ice/Ice Particle.png"), .1, true);
+        particle->addComponent<ParticleGenerator>(10, 2.f, 100.f, 100.f, pos, Resources::get<Texture>("Free/Traps/Sand Mud Ice/Ice Particle.png"), player, .1, true);
     }
 
     //Add in floating platform

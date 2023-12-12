@@ -18,16 +18,10 @@ void HazardComponent::update(double dt) {
     else {
         return;
     }
-
-    auto playerPos = _player-> getPosition();
-    playerPos.x += 32;
-    playerPos.y += 32;
-
-    sf::Vector2f pos = _parent->getPosition();
-    sf::IntRect hazardBounds = sf::IntRect(pos.x, pos.y, 64, 64);
-//    cout<<"Player Pos: "<<playerPos.x<<", "<<playerPos.y<<endl;
-//    cout<<"Hazard Pos: "<<hazardBounds.left<<" + "<<hazardBounds.left + hazardBounds.width<<", "<<hazardBounds.top<<" + "<<hazardBounds.top + hazardBounds.height<<endl;
-    if (hazardBounds.contains(playerPos.x, playerPos.y)) {
+    
+    auto hazardBounds = _parent->get_components<SpriteComponent>().at(0)->getSprite().getGlobalBounds();
+    auto playerBounds = _player->get_components<SpriteComponent>().at(0)->getSprite().getGlobalBounds();
+    if (hazardBounds.intersects(playerBounds)) {
             //Player is in contact with hazard
             std::cout << "_player is in contact with hazard" << std::endl;
             auto playerPhysics = _player->get_components<PlayerPhysicsComponent>().at(0);

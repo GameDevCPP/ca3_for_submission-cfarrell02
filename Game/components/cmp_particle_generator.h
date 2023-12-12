@@ -27,6 +27,7 @@ protected:
     sf::Vector2f _velocity;
     std::shared_ptr<sf::Texture> _texture;
     std::vector<Particle> _particles;
+    std::shared_ptr<Entity> _player;
     bool _active = true;
     float _rate;
     bool _loop;
@@ -35,7 +36,7 @@ protected:
 
 public:
     ParticleGenerator(Entity* p, int amount, float life, float speed, float spread, sf::Vector2f position,
-                      std::shared_ptr<sf::Texture> texture, float rate = -1, bool loop = false);
+                      std::shared_ptr<sf::Texture> texture, std::shared_ptr<Entity> player, float rate = -1, bool loop = false);
     ParticleGenerator() = delete;
     void update(double dt) override;
     void render() override;
