@@ -31,7 +31,9 @@ void MenuScene::Load() {
 
 
   }
-  setLoaded(true);
+    Engine::GetWindow().setView(Engine::GetWindow().getDefaultView());
+
+    setLoaded(true);
 }
 
 void MenuScene::Update(const double& dt) {

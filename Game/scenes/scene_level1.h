@@ -10,6 +10,7 @@ public:
     sf::View gameView;
     sf::View hudView;
     std::shared_ptr<Entity> player;
+    std::shared_ptr<Entity> flag;
 
     // Text
     sf::Text scoreText;
@@ -21,4 +22,6 @@ public:
   void Update(const double& dt) override;
 
   void Render() override;
+
+
 };

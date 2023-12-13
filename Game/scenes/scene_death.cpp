@@ -30,6 +30,9 @@ void DeathScene::Load() {
                                                          "Restart?", Color::White, Color::Red, Color::Blue);
 
     }
+
+    Engine::GetWindow().setView(Engine::GetWindow().getDefaultView());
+
     setLoaded(true);
 }
 
