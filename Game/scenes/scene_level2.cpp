@@ -31,7 +31,7 @@ void Level2Scene::Load() {
         player->setPosition(startPos);
         auto idleTexture = Resources::get<Texture>("Free/Main Characters/Mask Dude/Idle (32x32).png");
         auto psprite = player->addComponent<SpriteComponent>();
-        psprite->setTexture(idleTexture);
+      //  psprite->setTexture(idleTexture);
         psprite->getSprite().setOrigin(16.f, 16.f);
 
         auto animComp = player->addComponent<AnimationComponent>();
@@ -52,35 +52,28 @@ void Level2Scene::Load() {
       e->setPosition(pos);
       e->addComponent<PhysicsComponent>(b2_staticBody, Vector2f(40.f, 40.f));
     }
+    // First particle generator
         auto particles = ls::findTiles(ls::PARTICLEGENERATOR);
-    for (auto p : particles) {
+        int spread[] = {100,100,200};
+    for (int i = 0; i < particles.size(); i++) {
+        auto p = particles[i];
         auto particle = makeEntity();
         auto pos = ls::getTilePosition(p);
+        pos.x += 12;
         //Entity *p, int amount, float life, float speed, float spread,
-        particle->addComponent<ParticleGenerator>(5, 2, 10.f, 20.f, pos,
+        particle->addComponent<ParticleGenerator>(10, 2, 10.f, spread[i], pos,
                                                   Resources::get<Texture>("Free/Traps/Sand Mud Ice/Ice Particle.png"),
                                                   player, .1, true);
     }
+
     }
 
     //Add in floating platform
-    {
-        auto platforms = ls::findTiles(ls::WAYPOINT);
-        for(int i = 0; i < platforms.size() -1; i+=2) {
-            auto startPos = ls::getTilePosition(platforms[i]);
-            auto endPos = ls::getTilePosition(platforms[i+1]);
-            auto platform = makeEntity();
-            auto platformTexture = Resources::get<Texture>("Free/Terrain/Terrain (16x16).png");
-            IntRect platformRect = IntRect(272, 144, 16, 16);
-            auto psprite = platform->addComponent<SpriteComponent>();
-            psprite->setTexture(platformTexture);
-            psprite->getSprite().setTextureRect(platformRect);
-            psprite->getSprite().setScale(2.5f, 2.5f);
-            psprite->getSprite().setOrigin(8.f, 8.f);
-            platform->addComponent<FloatingPlatformComponent>(startPos, endPos, 50.f);
-            platform->addComponent<PhysicsComponent>(b2_kinematicBody, Vector2f(40.f, 40.f));
-        }
-
+    auto platforms = ls::findTiles(ls::WAYPOINT);
+    if (platforms.size() % 2 == 0 && !platforms.empty()) {
+        generatePlatforms(platforms, 3, 0);
+        generatePlatforms(platforms, 3, 2);
+        generatePlatforms(platforms, 4, 4);
     }
 
     {
@@ -164,6 +157,25 @@ void Level2Scene::Load() {
   cout << " Scene 1 Load Done" << endl;
 
   setLoaded(true);
+}
+
+void Level2Scene::generatePlatforms(std::vector<sf::Vector2ul> &platforms, int amount, int startIndex) {
+    for (int i = 0; i < amount; i++) {
+        auto startPos = ls::getTilePosition(platforms[startIndex]);
+        startPos.x += i*40;
+        auto endPos = ls::getTilePosition(platforms[startIndex+1]);
+        endPos.x += i*40;
+        auto platform = makeEntity();
+        auto platformTexture = Resources::get<Texture>("Free/Terrain/Terrain (16x16).png");
+        IntRect platformRect = IntRect(272, 144, 16, 16);
+        auto psprite = platform->addComponent<SpriteComponent>();
+        psprite->setTexture(platformTexture);
+        psprite->getSprite().setTextureRect(platformRect);
+        psprite->getSprite().setScale(2.5f, 2.5f);
+        psprite->getSprite().setOrigin(8.f, 8.f);
+        platform->addComponent<FloatingPlatformComponent>(startPos, endPos, 50.f);
+        platform->addComponent<PhysicsComponent>(b2_kinematicBody, Vector2f(40.f, 40.f));
+    }
 }
 
 void Level2Scene::UnLoad() {

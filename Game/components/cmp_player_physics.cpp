@@ -138,6 +138,7 @@ PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
   _body->SetBullet(true);
     hurt_sound_buffer = Resources::get<SoundBuffer>("Hit.wav");
     pickup_sound_buffer = Resources::get<SoundBuffer>("Pickup.wav");
+
 }
 
 void PlayerPhysicsComponent::setHealth(int health) {

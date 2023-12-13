@@ -24,4 +24,5 @@ public:
   void Render() override;
 
 
+    void generatePlatforms(std::vector<sf::Vector2ul> &platforms, int amount, int startIndex);
 };
