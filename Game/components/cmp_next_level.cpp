@@ -16,9 +16,9 @@ void NextLevelComponent::update(double dt) {
         if(_isEndGame){
             //Engine::ChangeScene((Scene*) new EndGameScene());
             std::cout<<"End the game here"<<std::endl;
-            //TODO: End the game here
+            _playerIsAtFlag = true;
         }else{
-            Engine::ChangeScene( _scene.get());
+            _playerIsAtFlag = true;
         }
     }
 }

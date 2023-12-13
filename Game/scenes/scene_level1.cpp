@@ -125,19 +125,18 @@ void Level1Scene::Load() {
         }
     }
 
-    //TODO End level point
     {
-        auto end = makeEntity();
+        flag = makeEntity();
         auto pos = ls::getTilePosition(ls::findTiles(ls::ENDLEVEL)[0]);
         pos.y += 10; // Offset the flad to be on the ground
-        end->setPosition(pos);
+        flag->setPosition(pos);
         auto endTexture = Resources::get<Texture>("Free/Items/Checkpoints/Checkpoint/Checkpoint (Flag Idle)(64x64).png");
-        auto esprite = end->addComponent<SpriteComponent>();
+        auto esprite = flag->addComponent<SpriteComponent>();
         esprite->setTexture(endTexture);
         esprite->getSprite().setOrigin(32.f, 32.f);
-        auto animComp = end->addComponent<AnimationComponent>();
+        auto animComp = flag->addComponent<AnimationComponent>();
         animComp->setAnimation(10, .1, endTexture, IntRect(Vector2i(0, 0), Vector2i(64, 64)));
-        end->addComponent<NextLevelComponent >(player,std::make_shared<Level1Scene>(), false);
+        flag->addComponent<NextLevelComponent >(player,std::make_shared<DeathScene>(), false);
     }
 
     gameView.setSize(Engine::GetWindow().getSize().x, Engine::GetWindow().getSize().y);
@@ -165,10 +164,18 @@ void Level1Scene::Update(const double& dt) {
 
   if (player->get_components<PlayerPhysicsComponent>()[0]->getHealth() <= 0) {
       Engine::ChangeScene(&death);
+  }else if(flag->get_components<NextLevelComponent>()[0]->getIsAtFlag()){
+      Engine::ChangeScene(&menu);
   }
-  gameView.setCenter(player->getPosition());
-  scoreText.setString("Score: " + to_string(player->get_components<PlayerPhysicsComponent>()[0]->getScore()));
-  healthText.setString("Health: " + to_string(player->get_components<PlayerPhysicsComponent>()[0]->getHealth()));
+
+    if(player != nullptr){
+        _playerPos = player->getPosition();
+        _playerHealth = player->get_components<PlayerPhysicsComponent>()[0]->getHealth();
+        _playerScore = player->get_components<PlayerPhysicsComponent>()[0]->getScore();
+    }
+  gameView.setCenter(_playerPos);
+  scoreText.setString("Score: " + to_string(_playerHealth));
+  healthText.setString("Health: " + to_string(_playerScore));
 
   scoreText.setPosition(gameView.getCenter().x - gameView.getSize().x / 2, gameView.getCenter().y - gameView.getSize().y / 2);
     healthText.setPosition(gameView.getCenter().x - gameView.getSize().x / 2, gameView.getCenter().y - gameView.getSize().y / 2 + 30);

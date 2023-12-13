@@ -15,11 +15,13 @@ public:
     void render() override ;
     explicit NextLevelComponent(Entity* p, std::shared_ptr<Entity> player, std::shared_ptr<Scene> scene, bool isEndGame = false);
     NextLevelComponent() = delete;
+    bool getIsAtFlag() {return _playerIsAtFlag;}
 
 protected:
     std::shared_ptr<Entity> _player;
     std::shared_ptr<Scene> _scene;
     bool _isEndGame;
+    bool _playerIsAtFlag = false;
 
 
 };
