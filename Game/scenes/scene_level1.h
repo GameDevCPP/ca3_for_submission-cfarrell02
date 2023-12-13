@@ -23,8 +23,5 @@ public:
 
   void Render() override;
 
-private:
-    sf::Vector2f _playerPos;
-    int _playerHealth;
-    int _playerScore;
+
 };

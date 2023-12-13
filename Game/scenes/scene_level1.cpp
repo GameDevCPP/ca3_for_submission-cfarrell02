@@ -168,14 +168,11 @@ void Level1Scene::Update(const double& dt) {
       Engine::ChangeScene(&menu);
   }
 
-    if(player != nullptr){
-        _playerPos = player->getPosition();
-        _playerHealth = player->get_components<PlayerPhysicsComponent>()[0]->getHealth();
-        _playerScore = player->get_components<PlayerPhysicsComponent>()[0]->getScore();
+    if(player != nullptr) {
+        gameView.setCenter(player->getPosition());
+        scoreText.setString("Score: " + to_string(player->get_components<PlayerPhysicsComponent>()[0]->getScore()));
+        healthText.setString("Health: " + to_string(player->get_components<PlayerPhysicsComponent>()[0]->getHealth()));
     }
-  gameView.setCenter(_playerPos);
-  scoreText.setString("Score: " + to_string(_playerHealth));
-  healthText.setString("Health: " + to_string(_playerScore));
 
   scoreText.setPosition(gameView.getCenter().x - gameView.getSize().x / 2, gameView.getCenter().y - gameView.getSize().y / 2);
     healthText.setPosition(gameView.getCenter().x - gameView.getSize().x / 2, gameView.getCenter().y - gameView.getSize().y / 2 + 30);
