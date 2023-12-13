@@ -51,11 +51,13 @@ void ParticleGenerator::update(double dt) {
             _particles.erase(_particles.begin() + i);
             --i;
             //Check for contact with player
-            auto playerBounds = _player->get_components<SpriteComponent>().at(0)->getSprite().getGlobalBounds();
-            auto particlePos = p.entity->getPosition();
-            if (playerBounds.contains(particlePos)){
-                auto playerPhysics = _player->get_components<PlayerPhysicsComponent>().at(0);
-                playerPhysics->setHealth(playerPhysics->getHealth() - 5);
+            if (_player != nullptr ) {
+                auto playerBounds = _player->get_components<SpriteComponent>().at(0)->getSprite().getGlobalBounds();
+                auto particlePos = p.entity->getPosition();
+                if (playerBounds.contains(particlePos)) {
+                    auto playerPhysics = _player->get_components<PlayerPhysicsComponent>().at(0);
+                    playerPhysics->setHealth(playerPhysics->getHealth() - 5);
+                }
             }
         }
     }

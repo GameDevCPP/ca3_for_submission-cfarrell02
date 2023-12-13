@@ -141,14 +141,18 @@ PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
 
 }
 
-void PlayerPhysicsComponent::setHealth(int health) {
-    if (health < _health) {
-        soundClick.setBuffer(*hurt_sound_buffer);
-        soundClick.play();
-    }
-    else if (health > _health) {
-        soundClick.setBuffer(*pickup_sound_buffer);
-        soundClick.play();
+void PlayerPhysicsComponent::setHealth(int health, bool playSound) {
+    if(playSound){
+        if (health < _health) {
+            soundClick.setVolume(1);
+            soundClick.setBuffer(*hurt_sound_buffer);
+            soundClick.play();
+        }
+        else if (health > _health) {
+            soundClick.setVolume(100);
+            soundClick.setBuffer(*pickup_sound_buffer);
+            soundClick.play();
+        }
     }
 
     _health = health;
@@ -162,10 +166,13 @@ void PlayerPhysicsComponent::setHealth(int health) {
 
 }
 
-void PlayerPhysicsComponent::setScore(int score) {
-    if (score > _score) {
-        soundClick.setBuffer(*pickup_sound_buffer);
-        soundClick.play();
+void PlayerPhysicsComponent::setScore(int score, bool playSound) {
+    if(playSound) {
+        if (score > _score) {
+            soundClick.setVolume(100);
+            soundClick.setBuffer(*pickup_sound_buffer);
+            soundClick.play();
+        }
     }
     _score = score;
     if (_score < 0) {

@@ -43,7 +43,7 @@ public:
   PlayerPhysicsComponent() = delete;
 
   int getHealth() const { return _health; }
-    void setHealth(int health);
+    void setHealth(int health, bool playSound = true);
     int getScore() const { return _score; }
-    void setScore(int score);
+    void setScore(int score, bool playSound = true);
 };

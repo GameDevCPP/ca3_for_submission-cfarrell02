@@ -18,16 +18,21 @@ using namespace sf;
 
 void Level1Scene::Load() {
     cout << " Scene 1 Load" << endl;
+    _levelMusic = Resources::get<sf::SoundBuffer>("Background Music.wav");
+    _sound.setBuffer(*_levelMusic);
+    _sound.play();
+    _sound.setLoop(true);
+    _sound.setVolume(25);
+
     ls::loadTextureFile("res/img/Free/Terrain/Terrain (16x16).png", 16);
     ls::loadLevelFile("res/level1.json", 40.0f);
 
 
 
-  // Create player
+    // Create player
     {
         player = makeEntity();
         auto startPos = ls::getTilePosition(ls::findTiles(ls::START)[0]);
-
         player->setPosition(startPos);
         auto idleTexture = Resources::get<Texture>("Free/Main Characters/Mask Dude/Idle (32x32).png");
         auto psprite = player->addComponent<SpriteComponent>();
@@ -39,7 +44,6 @@ void Level1Scene::Load() {
 
         playerHealth = 100;
         playerScore = 0;
-
 
 
 
@@ -168,6 +172,21 @@ void Level1Scene::Load() {
     healthText.setFont(*font);
     healthText.setCharacterSize(24);
 
+    const int spriteSize = 128;
+    const int width = Engine::GetWindow().getSize().x;
+    const int height = Engine::GetWindow().getSize().y;
+
+    for(int x = 0; x < width; x+=spriteSize) {
+        for(int y = 0; y < height;  y+=spriteSize) {
+            //Manually make a sprite
+            sf::Sprite sprite = sf::Sprite();
+            sprite.setTexture(*Resources::get<Texture>("Free/Background/Brown.png"));
+            sprite.setScale(2.0f, 2.0f);
+            sprite.setPosition(Vector2f(x, y));
+            backgroundSprites.push_back(sprite);
+        }
+    }
+
   cout << " Scene 1 Load Done" << endl;
 
   setLoaded(true);
@@ -175,7 +194,9 @@ void Level1Scene::Load() {
 
 void Level1Scene::UnLoad() {
   cout << "Scene 1 Unload" << endl;
+    _sound.stop();
   player.reset();
+
   ls::unload();
   Scene::UnLoad();
 }
@@ -195,7 +216,25 @@ if (player != nullptr) {
     healthText.setString("Health: " + to_string(player->get_components<PlayerPhysicsComponent>()[0]->getHealth()));
     playerHealth = player->get_components<PlayerPhysicsComponent>()[0]->getHealth();
     playerScore = player->get_components<PlayerPhysicsComponent>()[0]->getScore();
+
+    const int spriteSize = 128;
+    const int width = Engine::GetWindow().getSize().x;
+    const int height = Engine::GetWindow().getSize().y;
+
+    for (int x = 0; x < width; x += spriteSize) {
+        for (int y = 0; y < height; y += spriteSize) {
+            // Calculate the index correctly for sprite retrieval
+            int index = x / spriteSize + y / spriteSize * (width / spriteSize);
+            auto& sprite = backgroundSprites[index];
+            auto newPos = Vector2f(gameView.getCenter().x - gameView.getSize().x / 2 + x,
+                                   gameView.getCenter().y - gameView.getSize().y / 2 + y);
+            sprite.setPosition(newPos);
+        }
+    }
 }
+
+
+
 
   scoreText.setPosition(gameView.getCenter().x - gameView.getSize().x / 2, gameView.getCenter().y - gameView.getSize().y / 2);
     healthText.setPosition(gameView.getCenter().x - gameView.getSize().x / 2, gameView.getCenter().y - gameView.getSize().y / 2 + 30);
@@ -205,7 +244,12 @@ if (player != nullptr) {
 }
 
 void Level1Scene::Render() {
-  ls::render(Engine::GetWindow());
+
+    for(auto &s : backgroundSprites) {
+        Engine::GetWindow().draw(s);
+    }
+    ls::render(Engine::GetWindow());
+
     Engine::GetWindow().draw(scoreText);
     Engine::GetWindow().draw(healthText);
   Scene::Render();

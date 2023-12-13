@@ -1,4 +1,4 @@
-#include "scene_level1.h"
+#include "scene_level2.h"
 #include "../components/cmp_player_physics.h"
 #include "../components/cmp_sprite.h"
 #include "../game.h"
@@ -21,7 +21,11 @@ void Level2Scene::Load() {
     ls::loadTextureFile("res/img/Free/Terrain/Terrain (16x16).png", 16);
     ls::loadLevelFile("res/level2.json", 40.0f);
 
-
+    _levelMusic = Resources::get<sf::SoundBuffer>("Background Music2.wav");
+    _sound.setBuffer(*_levelMusic);
+    _sound.play();
+    _sound.setLoop(true);
+    _sound.setVolume(25);
 
   // Create player
     {
@@ -36,8 +40,10 @@ void Level2Scene::Load() {
 
         auto animComp = player->addComponent<AnimationComponent>();
         auto pPhys = player->addComponent<PlayerPhysicsComponent>(Vector2f(16.f, 30));
-        pPhys->setHealth(playerHealth);
-        pPhys->setScore(playerScore);
+        pPhys->setHealth(playerHealth, false);
+        pPhys->setScore(playerScore, false);
+
+
 
 
 
@@ -147,6 +153,22 @@ void Level2Scene::Load() {
         flag->addComponent<NextLevelComponent >(player,std::make_shared<DeathScene>(), false);
     }
 
+    const int spriteSize = 128;
+    const int width = Engine::GetWindow().getSize().x;
+    const int height = Engine::GetWindow().getSize().y;
+
+    for(int x = 0; x < width; x+=spriteSize) {
+        for(int y = 0; y < height;  y+=spriteSize) {
+            //Manually make a sprite
+            sf::Sprite sprite = sf::Sprite();
+            sprite.setTexture(*Resources::get<Texture>("Free/Background/Brown.png"));
+            sprite.setScale(2.0f, 2.0f);
+            sprite.setPosition(Vector2f(x, y));
+            backgroundSprites.push_back(sprite);
+        }
+    }
+
+
     gameView.setSize(Engine::GetWindow().getSize().x, Engine::GetWindow().getSize().y);
 
     auto font = Resources::get<sf::Font>("RobotoMono-Regular.ttf");
@@ -156,7 +178,7 @@ void Level2Scene::Load() {
     healthText.setFont(*font);
     healthText.setCharacterSize(24);
 
-  cout << " Scene 1 Load Done" << endl;
+  cout << " Scene 2 Load Done" << endl;
 
   setLoaded(true);
 }
@@ -181,8 +203,10 @@ void Level2Scene::generatePlatforms(std::vector<sf::Vector2ul> &platforms, int a
 }
 
 void Level2Scene::UnLoad() {
-  cout << "Scene 1 Unload" << endl;
-  player.reset();
+  cout << "Scene 2 Unload" << endl;
+    _sound.stop();
+
+    player.reset();
   ls::unload();
   Scene::UnLoad();
 }
@@ -193,7 +217,7 @@ void Level2Scene::Update(const double& dt) {
       Engine::ChangeScene(&death);
   }
   else if(flag->get_components<NextLevelComponent>()[0]->getIsAtFlag()){
-      Engine::ChangeScene(&menu);
+      Engine::ChangeScene(&level3);
   }
 
     if(player != nullptr) {
@@ -202,7 +226,24 @@ void Level2Scene::Update(const double& dt) {
         healthText.setString("Health: " + to_string(player->get_components<PlayerPhysicsComponent>()[0]->getHealth()));
         playerHealth = player->get_components<PlayerPhysicsComponent>()[0]->getHealth();
         playerScore = player->get_components<PlayerPhysicsComponent>()[0]->getScore();
-    }
+
+        const int spriteSize = 128;
+        const int width = Engine::GetWindow().getSize().x;
+        const int height = Engine::GetWindow().getSize().y;
+
+        for (int x = 0; x < width; x += spriteSize) {
+            for (int y = 0; y < height; y += spriteSize) {
+                // Calculate the index correctly for sprite retrieval
+                int index = x / spriteSize + y / spriteSize * (width / spriteSize);
+                auto& sprite = backgroundSprites[index];
+                auto newPos = Vector2f(gameView.getCenter().x - gameView.getSize().x / 2 + x,
+                                       gameView.getCenter().y - gameView.getSize().y / 2 + y);
+                sprite.setPosition(newPos);
+            }
+        }
+
+
+}
 
   scoreText.setPosition(gameView.getCenter().x - gameView.getSize().x / 2, gameView.getCenter().y - gameView.getSize().y / 2);
     healthText.setPosition(gameView.getCenter().x - gameView.getSize().x / 2, gameView.getCenter().y - gameView.getSize().y / 2 + 30);
@@ -212,6 +253,9 @@ void Level2Scene::Update(const double& dt) {
 }
 
 void Level2Scene::Render() {
+    for(auto &s : backgroundSprites) {
+        Engine::GetWindow().draw(s);
+    }
   ls::render(Engine::GetWindow());
     Engine::GetWindow().draw(scoreText);
     Engine::GetWindow().draw(healthText);

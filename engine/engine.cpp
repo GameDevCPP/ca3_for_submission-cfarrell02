@@ -88,10 +88,10 @@ void Engine::Render(RenderWindow& window) {
 		Loading_render();
 	}
 	else if (_activeScene != nullptr) {
-		_activeScene->Render();
+        _activeScene->Render();
 	}
 
-	Renderer::render();
+    Renderer::render();
 }
 
 void Engine::Start(unsigned int width, unsigned int height,
@@ -100,7 +100,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 	//window.setVerticalSyncEnabled(true);
 	_gameName = gameName;
 	_window = &window;
-    _window->setFramerateLimit(60);
+//    _window->setFramerateLimit(60);
 	Renderer::initialise(window);
 	Physics::initialise();
 	ChangeScene(scn);

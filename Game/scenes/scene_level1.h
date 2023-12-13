@@ -1,7 +1,8 @@
 #pragma once
 
 #include "engine.h"
-#include "SFML/Graphics/Text.hpp"
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 class Level1Scene : public Scene {
 public:
@@ -11,6 +12,7 @@ public:
     sf::View hudView;
     std::shared_ptr<Entity> player;
     std::shared_ptr<Entity> flag;
+    std::vector<sf::Sprite> backgroundSprites;
 
     // Text
     sf::Text scoreText;
@@ -23,5 +25,8 @@ public:
 
   void Render() override;
 
+protected:
+    std::shared_ptr<sf::SoundBuffer> _levelMusic;
+    sf::Sound _sound;
 
 };
