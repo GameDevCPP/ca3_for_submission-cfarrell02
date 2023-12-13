@@ -90,6 +90,7 @@ add_executable(Platformer ${GAME_SOURCE_FILES}
         Game/components/cmp_pickup.h
         Game/components/cmp_next_level.cpp
         Game/components/cmp_next_level.h
+        Game/scenes/scene_level2.cpp
 )
 target_link_libraries(Platformer lib_engine)
 set(EXECUTABLES ${EXECUTABLES} Platformer)

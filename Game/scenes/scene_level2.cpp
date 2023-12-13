@@ -16,10 +16,10 @@ using namespace std;
 using namespace sf;
 
 
-void Level1Scene::Load() {
+void Level2Scene::Load() {
     cout << " Scene 1 Load" << endl;
     ls::loadTextureFile("res/img/Free/Terrain/Terrain (16x16).png", 16);
-    ls::loadLevelFile("res/level1.json", 40.0f);
+    ls::loadLevelFile("res/level2.json", 40.0f);
 
 
 
@@ -99,45 +99,43 @@ void Level1Scene::Load() {
         }
 
     }
-        auto pickupLocations = ls::findTiles(ls::SCORE);
-    if (!pickupLocations.empty()) {
-        for (auto p: pickupLocations) {
-            auto pos = ls::getTilePosition(p);
-            pos = {pos.x + 20, pos.y + 30};
-            auto pickup = makeEntity();
-            pickup->setPosition(pos);
-            cout << "Pickup at: " << pos.x << ", " << pos.y << endl;
-            auto pickupTexture = Resources::get<Texture>("Free/Items/Fruits/Apple.png");
-            cout << "Pickup Texture: " << pickupTexture->getSize().x << ", " << pickupTexture->getSize().y << endl;
-            auto psprite = pickup->addComponent<SpriteComponent>();
-            psprite->setTexture(pickupTexture);
-            psprite->getSprite().setOrigin(16.f, 16.f);
-            auto animComp = pickup->addComponent<AnimationComponent>();
-            animComp->setAnimation(17, .1, pickupTexture, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
-            pickup->addComponent<PickupComponent>(PickupComponent::PickupType::SCORE, 10, player);
-        }
-    }
-
-
-        auto pickup2Locations = ls::findTiles(ls::HEALTH);
-    if (!pickupLocations.empty()) {
-        for(auto p : pickup2Locations){
-            auto pos = ls::getTilePosition(p);
-            pos = {pos.x + 20, pos.y + 30};
-            auto pickup = makeEntity();
-            pickup->setPosition(pos);
-            cout<<"Pickup at: "<<pos.x<<", "<<pos.y<<endl;
-            auto pickupTexture = Resources::get<Texture>("Free/Items/Fruits/Pineapple.png");
-            cout<<"Pickup Texture: "<<pickupTexture->getSize().x<<", "<<pickupTexture->getSize().y<<endl;
-            auto psprite = pickup->addComponent<SpriteComponent>();
-            psprite->setTexture(pickupTexture);
-            psprite->getSprite().setOrigin(16.f, 16.f);
-            auto animComp = pickup->addComponent<AnimationComponent>();
-            animComp->setAnimation(17, .1, pickupTexture, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
-            pickup->addComponent<PickupComponent>(PickupComponent::PickupType::HEALTH, 10, player);
-        }
-    }
-
+//    {
+//        auto pickupLocations = ls::findTiles(ls::SCORE);
+//        for(auto p : pickupLocations){
+//            auto pos = ls::getTilePosition(p);
+//            pos = {pos.x + 20, pos.y + 30};
+//            auto pickup = makeEntity();
+//            pickup->setPosition(pos);
+//            cout<<"Pickup at: "<<pos.x<<", "<<pos.y<<endl;
+//            auto pickupTexture = Resources::get<Texture>("Free/Items/Fruits/Apple.png");
+//            cout<<"Pickup Texture: "<<pickupTexture->getSize().x<<", "<<pickupTexture->getSize().y<<endl;
+//            auto psprite = pickup->addComponent<SpriteComponent>();
+//            psprite->setTexture(pickupTexture);
+//            psprite->getSprite().setOrigin(16.f, 16.f);
+//            auto animComp = pickup->addComponent<AnimationComponent>();
+//            animComp->setAnimation(17, .1, pickupTexture, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
+//            pickup->addComponent<PickupComponent>(PickupComponent::PickupType::SCORE, 10, player);
+//        }
+//    }
+//    {
+//        auto pickupLocations = ls::findTiles(ls::HEALTH);
+//        for(auto p : pickupLocations){
+//            auto pos = ls::getTilePosition(p);
+//            pos = {pos.x + 20, pos.y + 30};
+//            auto pickup = makeEntity();
+//            pickup->setPosition(pos);
+//            cout<<"Pickup at: "<<pos.x<<", "<<pos.y<<endl;
+//            auto pickupTexture = Resources::get<Texture>("Free/Items/Fruits/Pineapple.png");
+//            cout<<"Pickup Texture: "<<pickupTexture->getSize().x<<", "<<pickupTexture->getSize().y<<endl;
+//            auto psprite = pickup->addComponent<SpriteComponent>();
+//            psprite->setTexture(pickupTexture);
+//            psprite->getSprite().setOrigin(16.f, 16.f);
+//            auto animComp = pickup->addComponent<AnimationComponent>();
+//            animComp->setAnimation(17, .1, pickupTexture, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
+//            pickup->addComponent<PickupComponent>(PickupComponent::PickupType::HEALTH, 10, player);
+//        }
+//    }
+//
 
 
     {
@@ -168,20 +166,20 @@ void Level1Scene::Load() {
   setLoaded(true);
 }
 
-void Level1Scene::UnLoad() {
+void Level2Scene::UnLoad() {
   cout << "Scene 1 Unload" << endl;
   player.reset();
   ls::unload();
   Scene::UnLoad();
 }
 
-void Level1Scene::Update(const double& dt) {
+void Level2Scene::Update(const double& dt) {
 
   if (player->get_components<PlayerPhysicsComponent>()[0]->getHealth() <= 0) {
       Engine::ChangeScene(&death);
   }
   else if(flag->get_components<NextLevelComponent>()[0]->getIsAtFlag()){
-      Engine::ChangeScene(&level2);
+      Engine::ChangeScene(&menu);
   }
 
     if(player != nullptr) {
@@ -197,7 +195,7 @@ void Level1Scene::Update(const double& dt) {
   Scene::Update(dt);
 }
 
-void Level1Scene::Render() {
+void Level2Scene::Render() {
   ls::render(Engine::GetWindow());
     Engine::GetWindow().draw(scoreText);
     Engine::GetWindow().draw(healthText);
