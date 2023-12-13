@@ -92,43 +92,43 @@ void Level2Scene::Load() {
         }
 
     }
-//    {
-//        auto pickupLocations = ls::findTiles(ls::SCORE);
-//        for(auto p : pickupLocations){
-//            auto pos = ls::getTilePosition(p);
-//            pos = {pos.x + 20, pos.y + 30};
-//            auto pickup = makeEntity();
-//            pickup->setPosition(pos);
-//            cout<<"Pickup at: "<<pos.x<<", "<<pos.y<<endl;
-//            auto pickupTexture = Resources::get<Texture>("Free/Items/Fruits/Apple.png");
-//            cout<<"Pickup Texture: "<<pickupTexture->getSize().x<<", "<<pickupTexture->getSize().y<<endl;
-//            auto psprite = pickup->addComponent<SpriteComponent>();
-//            psprite->setTexture(pickupTexture);
-//            psprite->getSprite().setOrigin(16.f, 16.f);
-//            auto animComp = pickup->addComponent<AnimationComponent>();
-//            animComp->setAnimation(17, .1, pickupTexture, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
-//            pickup->addComponent<PickupComponent>(PickupComponent::PickupType::SCORE, 10, player);
-//        }
-//    }
-//    {
-//        auto pickupLocations = ls::findTiles(ls::HEALTH);
-//        for(auto p : pickupLocations){
-//            auto pos = ls::getTilePosition(p);
-//            pos = {pos.x + 20, pos.y + 30};
-//            auto pickup = makeEntity();
-//            pickup->setPosition(pos);
-//            cout<<"Pickup at: "<<pos.x<<", "<<pos.y<<endl;
-//            auto pickupTexture = Resources::get<Texture>("Free/Items/Fruits/Pineapple.png");
-//            cout<<"Pickup Texture: "<<pickupTexture->getSize().x<<", "<<pickupTexture->getSize().y<<endl;
-//            auto psprite = pickup->addComponent<SpriteComponent>();
-//            psprite->setTexture(pickupTexture);
-//            psprite->getSprite().setOrigin(16.f, 16.f);
-//            auto animComp = pickup->addComponent<AnimationComponent>();
-//            animComp->setAnimation(17, .1, pickupTexture, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
-//            pickup->addComponent<PickupComponent>(PickupComponent::PickupType::HEALTH, 10, player);
-//        }
-//    }
-//
+    {
+        auto pickupLocations = ls::findTiles(ls::SCORE);
+        for(auto p : pickupLocations){
+            auto pos = ls::getTilePosition(p);
+            pos = {pos.x + 20, pos.y + 30};
+            auto pickup = makeEntity();
+            pickup->setPosition(pos);
+            cout<<"Pickup at: "<<pos.x<<", "<<pos.y<<endl;
+            auto pickupTexture = Resources::get<Texture>("Free/Items/Fruits/Apple.png");
+            cout<<"Pickup Texture: "<<pickupTexture->getSize().x<<", "<<pickupTexture->getSize().y<<endl;
+            auto psprite = pickup->addComponent<SpriteComponent>();
+            psprite->setTexture(pickupTexture);
+            psprite->getSprite().setOrigin(16.f, 16.f);
+            auto animComp = pickup->addComponent<AnimationComponent>();
+            animComp->setAnimation(17, .1, pickupTexture, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
+            pickup->addComponent<PickupComponent>(PickupComponent::PickupType::SCORE, 10, player);
+        }
+    }
+    {
+        auto pickupLocations = ls::findTiles(ls::HEALTH);
+        for(auto p : pickupLocations){
+            auto pos = ls::getTilePosition(p);
+            pos = {pos.x + 20, pos.y + 30};
+            auto pickup = makeEntity();
+            pickup->setPosition(pos);
+            cout<<"Pickup at: "<<pos.x<<", "<<pos.y<<endl;
+            auto pickupTexture = Resources::get<Texture>("Free/Items/Fruits/Pineapple.png");
+            cout<<"Pickup Texture: "<<pickupTexture->getSize().x<<", "<<pickupTexture->getSize().y<<endl;
+            auto psprite = pickup->addComponent<SpriteComponent>();
+            psprite->setTexture(pickupTexture);
+            psprite->getSprite().setOrigin(16.f, 16.f);
+            auto animComp = pickup->addComponent<AnimationComponent>();
+            animComp->setAnimation(17, .1, pickupTexture, IntRect(Vector2i(0, 0), Vector2i(32, 32)));
+            pickup->addComponent<PickupComponent>(PickupComponent::PickupType::HEALTH, 10, player);
+        }
+    }
+
 
 
     {
