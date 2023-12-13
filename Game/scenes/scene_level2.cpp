@@ -36,6 +36,8 @@ void Level2Scene::Load() {
 
         auto animComp = player->addComponent<AnimationComponent>();
         auto pPhys = player->addComponent<PlayerPhysicsComponent>(Vector2f(16.f, 30));
+        pPhys->setHealth(playerHealth);
+        pPhys->setScore(playerScore);
 
 
 
@@ -198,6 +200,8 @@ void Level2Scene::Update(const double& dt) {
         gameView.setCenter(player->getPosition());
         scoreText.setString("Score: " + to_string(player->get_components<PlayerPhysicsComponent>()[0]->getScore()));
         healthText.setString("Health: " + to_string(player->get_components<PlayerPhysicsComponent>()[0]->getHealth()));
+        playerHealth = player->get_components<PlayerPhysicsComponent>()[0]->getHealth();
+        playerScore = player->get_components<PlayerPhysicsComponent>()[0]->getScore();
     }
 
   scoreText.setPosition(gameView.getCenter().x - gameView.getSize().x / 2, gameView.getCenter().y - gameView.getSize().y / 2);

@@ -13,8 +13,11 @@ Level1Scene level1;
 Level2Scene level2;
 DeathScene death;
 
+int playerHealth = 100;
+int playerScore = 0;
+
 
 int main() {
-    Engine::Start(1920 , 1080, "Deadly Rain", &menu);
+    Engine::Start(1920 , 1080, "Deadly Rain", &death);
     //JsonReader::loadLevel("res/level1.json");
 }

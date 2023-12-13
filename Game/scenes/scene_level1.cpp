@@ -37,6 +37,9 @@ void Level1Scene::Load() {
         auto animComp = player->addComponent<AnimationComponent>();
         auto pPhys = player->addComponent<PlayerPhysicsComponent>(Vector2f(16.f, 30));
 
+        playerHealth = 100;
+        playerScore = 0;
+
 
 
 
@@ -60,6 +63,8 @@ void Level1Scene::Load() {
         particle->addComponent<ParticleGenerator>(5, 2, 10.f, 20.f, pos,
                                                   Resources::get<Texture>("Free/Traps/Sand Mud Ice/Ice Particle.png"),
                                                   player, .1, true);
+
+
     }
     }
 
@@ -177,7 +182,6 @@ void Level1Scene::UnLoad() {
 
 void Level1Scene::Update(const double& dt) {
 
-    if(player== nullptr) return;
 
   if (player->get_components<PlayerPhysicsComponent>()[0]->getHealth() <= 0) {
       Engine::ChangeScene(&death);
@@ -185,10 +189,13 @@ void Level1Scene::Update(const double& dt) {
   else if(flag->get_components<NextLevelComponent>()[0]->getIsAtFlag()){
       Engine::ChangeScene(&level2);
   }
-
+if (player != nullptr) {
     gameView.setCenter(player->getPosition());
     scoreText.setString("Score: " + to_string(player->get_components<PlayerPhysicsComponent>()[0]->getScore()));
     healthText.setString("Health: " + to_string(player->get_components<PlayerPhysicsComponent>()[0]->getHealth()));
+    playerHealth = player->get_components<PlayerPhysicsComponent>()[0]->getHealth();
+    playerScore = player->get_components<PlayerPhysicsComponent>()[0]->getScore();
+}
 
   scoreText.setPosition(gameView.getCenter().x - gameView.getSize().x / 2, gameView.getCenter().y - gameView.getSize().y / 2);
     healthText.setPosition(gameView.getCenter().x - gameView.getSize().x / 2, gameView.getCenter().y - gameView.getSize().y / 2 + 30);

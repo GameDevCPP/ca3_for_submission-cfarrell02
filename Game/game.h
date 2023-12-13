@@ -12,3 +12,5 @@ extern DeathScene death;
 extern Level1Scene level1;
 extern Level2Scene level2;
 
+extern int playerHealth;
+extern int playerScore;
