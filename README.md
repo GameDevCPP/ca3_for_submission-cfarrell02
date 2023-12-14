@@ -1,35 +1,59 @@
-# Drop-Pod-Game
-C++ game for games engineering coursework.
 
-## Installation
+# Deadly Rain Game for C++
 
-### Itch.io
-If you are wanting to just play the game without having to get the repo visit our Itch.Io page and follow the instructions there. https://stoketheflame.itch.io/drop-pod
+This document outlines the components developed for the 'Deadly Rain' CA.
 
-### Download Repo
-If starting on a new computer or redownloading the repo from scratch and lib/sfml and/or lib/b2d is empty. Open git bash shell in drop-pod-game directory and run command:
+## Player Physics Component
 
-git submodule update --init --recursive
+**PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p, const Vector2f& size, int health)**
 
-This will download the submodules for the project.
-To check if that has worked correctly run command:
+- **Size:** Size of the player.
+- **Health:** Starting health of the player.
 
-git submodule status
+## Pickup Component
 
-Results should show:
+**PickupComponent::PickupComponent(Entity* p, PickupType type, int value, std::shared_ptr<Entity> player)**
+
+- **Type:** Can be either HEALTH or SCORE. If HEALTH, it adds health to the player; with SCORE, it adds score to the player.
+- **Value:** The amount to be added to health or score.
+- **Player Reference:** Used for detection purposes.
+
+## Hazard Component
+
+**HazardComponent::HazardComponent(Entity* p, int damage, std::shared_ptr<Entity> player, float rate)**
+
+- **Damage:** The amount of damage the hazard inflicts.
+- **Player Reference:** Used for detection purposes.
+- **Rate:** The rate at which damage should be administered.
+
+## Particle Generator Component
+
+**ParticleGenerator::ParticleGenerator(Entity* p, int amount, float life, float speed, float spread, sf::Vector2f position, std::shared_ptr<sf::Texture> texture, std::shared_ptr<Entity> player, float rate, bool loop)**
+
+- **Amount:** Number of particles to be generated.
+- **Life:** Lifespan of particles.
+- **Speed:** Speed of particles.
+- **Spread:** Spread of particles.
+- **Position:** Generator's position.
+- **Texture:** Texture of particles.
+- **Player Reference:** Used for detection.
+- **Rate:** Rate of particle generation.
+- **Loop:** Boolean for looping the particles.
+
+## Next Level
+
+**NextLevelComponent::NextLevelComponent(Entity* p, std::shared_ptr<Entity> player, std::shared_ptr<Scene> scene, bool isEndGame)**
+
+- **Player Reference:** Used for detection.
+- **Scene Reference:** Reference to the next scene.
+- **IsEndGame:** Boolean indicating if the current scene is the last level.
+
+## Floating Platforms
+
+**FloatingPlatformComponent::FloatingPlatformComponent(Entity* p, sf::Vector2f startPos, sf::Vector2f endPos, float speed)**
+
+- **StartPos:** Starting position of the platform where it reverses direction.
+- **EndPos:** Ending position of the platform where it reverses direction.
+- **Speed:** Speed of the platform.
 
 
-Then compile with CMake. This will show an error for developers just ignore.
-
-CMake Warning (dev) at C:/Program Files/CMake/share/cmake-3.22/Modules/FindPackageHandleStandardArgs.cmake:438 (message):
-  The package name passed to `find_package_handle_standard_args` (VORBIS)
-  does not match the name of the calling package (Vorbis).  This can lead to
-  problems in calling code that expects `find_package` result variables
-  (e.g., `_FOUND`) to follow a certain pattern.
-Call Stack (most recent call first):
-  lib/sfml/cmake/Modules/FindVorbis.cmake:25 (find_package_handle_standard_args)
-  lib/sfml/cmake/Macros.cmake:279 (find_package)
-  lib/sfml/src/SFML/Audio/CMakeLists.txt:70 (sfml_find_package)
-This warning is for project developers.  Use -Wno-dev to suppress it.
-
-IGNORE THIS IT SHOULD STILL COMPILE.
