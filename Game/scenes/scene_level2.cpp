@@ -161,7 +161,7 @@ void Level2Scene::Load() {
         for(int y = 0; y < height;  y+=spriteSize) {
             //Manually make a sprite
             sf::Sprite sprite = sf::Sprite();
-            sprite.setTexture(*Resources::get<Texture>("Free/Background/Brown.png"));
+            sprite.setTexture(*Resources::get<Texture>("Free/Background/Yellow.png"));
             sprite.setScale(2.0f, 2.0f);
             sprite.setPosition(Vector2f(x, y));
             backgroundSprites.push_back(sprite);

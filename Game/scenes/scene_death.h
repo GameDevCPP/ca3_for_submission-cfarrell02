@@ -7,6 +7,7 @@
 
 
 #include "engine.h"
+#include <SFML/Graphics.hpp>
 
 class DeathScene : public Scene {
 public:
@@ -28,6 +29,8 @@ protected:
     int _score;
     int _level;
     std::shared_ptr<Entity> _startButton;
+    std::vector<sf::Sprite> backgroundSprites;
+
 
 };
 

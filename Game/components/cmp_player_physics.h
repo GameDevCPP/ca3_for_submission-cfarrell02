@@ -16,7 +16,9 @@ protected:
   bool _grounded;
   std::shared_ptr<sf::SoundBuffer> hurt_sound_buffer;
     std::shared_ptr<sf::SoundBuffer> pickup_sound_buffer;
-  sf::Sound soundClick;
+    std::shared_ptr<sf::SoundBuffer> health_sound_buffer;
+
+    sf::Sound soundClick;
   float _groundspeed;
   int _health;
   const int _maxHealth;

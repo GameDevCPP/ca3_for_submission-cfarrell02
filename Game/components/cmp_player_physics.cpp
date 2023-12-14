@@ -138,19 +138,20 @@ PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
   _body->SetBullet(true);
     hurt_sound_buffer = Resources::get<SoundBuffer>("Hit.wav");
     pickup_sound_buffer = Resources::get<SoundBuffer>("Pickup.wav");
+    health_sound_buffer = Resources::get<SoundBuffer>("Health.wav");
 
 }
 
 void PlayerPhysicsComponent::setHealth(int health, bool playSound) {
     if(playSound){
         if (health < _health) {
-            soundClick.setVolume(1);
+            soundClick.setVolume(10);
             soundClick.setBuffer(*hurt_sound_buffer);
             soundClick.play();
         }
         else if (health > _health) {
             soundClick.setVolume(100);
-            soundClick.setBuffer(*pickup_sound_buffer);
+            soundClick.setBuffer(*health_sound_buffer);
             soundClick.play();
         }
     }

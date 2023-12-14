@@ -24,33 +24,53 @@ void Loading_update(float dt, const Scene* const scn) {
 		loading = false;
 	}
 	else {
-		loadingspinner += 400.0f * dt;
+		loadingspinner += 800.0f * dt;
 		loadingTime += dt;
 	}
 }
 void Loading_render() {
-	// cout << "Eng: Loading Screen Render\n";
+	cout << "Eng: Loading Screen Render\n";
 
-	static Sprite background;
-	auto backTexture = Resources::get<Texture>("Space_Background.png");
-	background.setTexture(*backTexture);
+    auto currentView = _window->getView();
+    auto viewPos = currentView.getCenter() - currentView.getSize() * 0.5f;
+    const int spriteSize = 128;
+    const int width = Engine::GetWindow().getSize().x;
+    const int height = Engine::GetWindow().getSize().y;
+    vector<sf::Sprite> backgroundSprites;
+
+    for(int x = 0; x < width; x+=spriteSize) {
+        for(int y = 0; y < height;  y+=spriteSize) {
+            //Manually make a sprite
+            sf::Sprite sprite = sf::Sprite();
+            sprite.setTexture(*Resources::get<Texture>("Free/Background/Purple.png"));
+            sprite.setScale(2.0f, 2.0f);
+            sprite.setPosition(viewPos + Vector2f(x, y));
+            backgroundSprites.push_back(sprite);
+        }
+    }
+
+//    static Sprite background;
+//    background.setPosition(viewPos);
+//	auto backTexture = Resources::get<Texture>("Space_Background.png");
+//	background.setTexture(*backTexture);
 
 	static CircleShape octagon(100);
 	octagon.setOrigin(Vector2f(100, 100));
 	octagon.setRotation(deg2rad(loadingspinner));
-	octagon.setPosition(Vcast<float>(Engine::getWindowSize()) * .5f);
+	octagon.setPosition(Vcast<float>(currentView.getCenter()));
 	auto tex = new Texture();
-	tex->loadFromFile("res/img/Terran.png");
-	octagon.setFillColor(Color(255, 255, 255, min(255.f, 40.f * loadingTime)));
+	tex->loadFromFile("res/img/Loading.png");
 	octagon.setTexture(tex);
 
 	static Text t("Loading", *Resources::get<sf::Font>("RobotoMono-Regular.ttf"));
 	t.setFillColor(Color(255, 255, 255, min(255.f, 40.f * loadingTime)));
 	t.setOutlineThickness(2);
-	t.setPosition(Vcast<float>(Engine::getWindowSize()) * Vector2f(0.5f, 0.3f));
+	t.setPosition(Vcast<float>(currentView.getCenter()) + Vector2f(0, 300));
 	t.setOrigin(t.getLocalBounds().left + t.getLocalBounds().width / 2.0f,
 		t.getLocalBounds().top + t.getLocalBounds().height / 2.0f);
-	Renderer::queue(&background);
+	for (auto& s : backgroundSprites) {
+        Renderer::queue(&s);
+    }
 	Renderer::queue(&t);
 	Renderer::queue(&octagon);
 }

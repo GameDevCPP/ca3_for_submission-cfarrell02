@@ -33,6 +33,21 @@ void DeathScene::Load() {
 
     Engine::GetWindow().setView(Engine::GetWindow().getDefaultView());
 
+    const int spriteSize = 128;
+    const int width = Engine::GetWindow().getSize().x;
+    const int height = Engine::GetWindow().getSize().y;
+
+    for(int x = 0; x < width; x+=spriteSize) {
+        for(int y = 0; y < height;  y+=spriteSize) {
+            //Manually make a sprite
+            sf::Sprite sprite = sf::Sprite();
+            sprite.setTexture(*Resources::get<Texture>("Free/Background/Gray.png"));
+            sprite.setScale(2.0f, 2.0f);
+            sprite.setPosition(Vector2f(x, y));
+            backgroundSprites.push_back(sprite);
+        }
+    }
+
     setLoaded(true);
 }
 
@@ -44,6 +59,8 @@ void DeathScene::Update(const double& dt) {
         Engine::ChangeScene(&menu);
     }
 
+
+
     Scene::Update(dt);
 }
 
@@ -52,5 +69,9 @@ void DeathScene::UnLoad() {
 }
 
 void DeathScene::Render() {
+    for (auto& b : backgroundSprites) {
+        Engine::GetWindow().draw(b);
+    }
+
     Scene::Render();
 }
