@@ -29,14 +29,14 @@ void Loading_update(float dt, const Scene* const scn) {
 	}
 }
 void Loading_render() {
-	cout << "Eng: Loading Screen Render\n";
+//	cout << "Eng: Loading Screen Render\n";
 
     auto currentView = _window->getView();
     auto viewPos = currentView.getCenter() - currentView.getSize() * 0.5f;
     const int spriteSize = 128;
     const int width = Engine::GetWindow().getSize().x;
     const int height = Engine::GetWindow().getSize().y;
-    vector<sf::Sprite> backgroundSprites;
+    static vector<sf::Sprite> backgroundSprites;
 
     for(int x = 0; x < width; x+=spriteSize) {
         for(int y = 0; y < height;  y+=spriteSize) {
@@ -49,10 +49,6 @@ void Loading_render() {
         }
     }
 
-//    static Sprite background;
-//    background.setPosition(viewPos);
-//	auto backTexture = Resources::get<Texture>("Space_Background.png");
-//	background.setTexture(*backTexture);
 
 	static CircleShape octagon(100);
 	octagon.setOrigin(Vector2f(100, 100));
@@ -188,7 +184,7 @@ void Engine::ChangeScene(Scene* s) {
 	if (!s->isLoaded()) {
 		cout << "Eng: Entering Loading Screen\n";
 		loadingTime = 0;
-		_activeScene->LoadAsync(); 
+		_activeScene->LoadAsync();
 		//_activeScene->Load();
 		loading = true;
 	}
